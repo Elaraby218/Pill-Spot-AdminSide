@@ -7,13 +7,16 @@ import {
 } from "react-router-dom";
 
 import RootPage from "../Pages/RootPage";
+import AdminLogin from "../Pages/LoginPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
   
   <Route path="/" element={<RootPage />}>
-    
-  </Route>)
+    <Route path="login" element={<AdminLogin/>}/>
+  </Route>
+  
+)
 
 );
 
