@@ -1,0 +1,13 @@
+{
+  "Welcome to React": "أهلاً بك في React و react-i18next",
+  "userName": "اسم المستخدم",
+  "password": "كلمة المرور",
+  "logIn": "تسجيل الدخول",
+  "stayLogin": "البقاء مسجلا",
+  "forgetPass": "هل نسيت كلمة المرور؟",
+  "pSpot1": "PillSpot",
+  "pSpot2": "جرعتك اليومية من العناية",
+  "pSpot3": "ابقَ على المسار، ابقَ بصحة جيدة",
+  "getSrt": "ابدأ الآن",
+  "createAcc": "إنشاء حساب"
+}

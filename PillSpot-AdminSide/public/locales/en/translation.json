@@ -1,0 +1,13 @@
+{
+    "Welcome to React": "Welcome to React and react-i18next",
+    "userName" : "User Name",
+    "password" : "Password" , 
+    "logIn" : "Login" , 
+    "stayLogin" : "Stay Login",
+    "forgetPass" : "Forget Password !",
+    "pSpot1" : "PillSpot" , 
+    "pSpot2" : "Your Daily Dose of Care",
+    "pSpot3" : "Stay on Track, Stay Healthy",
+    "getSrt" : "Get Start",
+    "createAcc" : "Create Account"
+}
