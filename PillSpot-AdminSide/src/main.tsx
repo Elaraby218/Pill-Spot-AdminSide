@@ -3,17 +3,19 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 
 import { Provider } from "react-redux";
-import { store } from "./App/Store.ts";
+import { persistor, store } from "./App/Store.ts";
 import Router from "./Router/index.tsx";
 // import ReactFormm from "./tryReactHook/index.tsx";
 // import { ConfigProvider, theme } from 'antd'
 import "./i18n.ts";
-
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <Router/>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router />
+      </PersistGate>
       {/* <ReactFormm/> */}
     </Provider>
   </StrictMode>
