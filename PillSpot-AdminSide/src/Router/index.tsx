@@ -10,6 +10,7 @@ import { Toaster } from 'sonner'
 import RootPage from "../Pages/RootPage";
 import AdminLogin from "../Pages/LoginPage";
 import HomePageLayout from "../Pages/AdminHomePage/Layout";
+import AdminDashBoard from "../Pages/AdminHomePage/Dashboard/indes";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,7 +18,7 @@ const router = createBrowserRouter(
   <Route path="/" element={<RootPage />}>
     <Route index element={<AdminLogin />} />
     <Route path="/admin-home" element={<HomePageLayout />} >
-      <Route path="dashboard" index element={<h1>Hello iam dashboard</h1>} />
+      <Route path="dashboard" index element={<AdminDashBoard/>} />
     </Route>
     
   </Route>
