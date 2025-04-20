@@ -29,7 +29,7 @@ const Sider = () => {
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
 
-      <NavLink to={"#"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Pharmacy Management">
+      <NavLink to={"pharmacy"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Pharmacy Management">
         <BsBuildingFillGear className={iconStyle} />
       </NavLink>
       

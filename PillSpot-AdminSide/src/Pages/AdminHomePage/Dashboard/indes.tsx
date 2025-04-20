@@ -1,4 +1,3 @@
-import CalenderEr from "../../../components/Calender";
 import PharmacyCard from "../../../components/PharmacyCard/PharmacyCard";
 import TODO from "../../../components/TODO";
 import InfoCard from "./InfoCard";

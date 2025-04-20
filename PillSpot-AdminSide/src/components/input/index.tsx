@@ -34,7 +34,7 @@ const TextInput: React.FC<IProps> = ({
   }
 
   return (
-    <div className="my-5">
+    <div className="my-2">
       <div className="flex items-center gap-1 text-lg">
         {children}
         <label htmlFor={name}>{label}</label>
