@@ -26,7 +26,7 @@ const Pharmacy = () => {
       </div>
 
       <div>
-        <PreviewCard w={65} h={86} title="Pharmacy Preview">
+        <PreviewCard w={65} h={86} title="">
           <div className="flex flex-col items-center justify-center text-white gap-5">
             <PharHeader/>
 
