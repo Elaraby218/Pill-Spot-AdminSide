@@ -1,0 +1,83 @@
+
+#com_box
+{
+    display: flex;
+    flex-direction: column;
+    padding:20px  0;
+    align-items: center;
+    overflow:auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+#com_card
+{
+    width:360px;
+    height:180px;
+    background-color: #1E222B;
+    padding:14px 20px;
+    border-radius: 8px;
+}
+#card_head
+{
+    width:100%;
+    height:auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#card_info
+{
+    width:60%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+#card_info .name
+{
+   color: #B3C9F8;
+   font-family: "Playwrite US Modern", cursive;
+   font-size: 13px;
+}
+#card_info .role
+{
+    color:#fff;
+    font-size: 13px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 300;
+}
+#img_box
+{
+    width:55px;
+    height:55px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+#img_box img
+{
+    position:absolute;
+    width:100%;
+    height:auto;
+    display: block;
+}
+#com_card .date
+{
+    width:auto;
+    height:auto;
+    border-radius: 6px;
+    background-color: #5B6781;
+    color:#1E222B;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    padding: 3px 10px;
+}
+.complaint
+{
+    color:#A8A6A6;
+    font-size: 12px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight:300 ;
+    margin-top: 19px;
+}
