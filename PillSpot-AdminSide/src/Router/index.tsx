@@ -12,6 +12,9 @@ import AdminLogin from "../Pages/LoginPage";
 import HomePageLayout from "../Pages/AdminHomePage/Layout";
 import AdminDashBoard from "../Pages/AdminHomePage/Dashboard/indes";
 import Pharmacy from "../Pages/AdminHomePage/Pharmacy";
+import FeedbackPage from "../Pages/AdminHomePage/Pharmacy/FeedBackPage";
+import AddProduct from "../Pages/addProduct";
+import UsersManagementPage from "../Pages/Users Management Page";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +24,9 @@ const router = createBrowserRouter(
     <Route path="/admin-home" element={<HomePageLayout />} >
       <Route path="dashboard" index element={<AdminDashBoard/>} />
       <Route path="pharmacy" index element={<Pharmacy/>} />
+      <Route path="feedback" index element={<FeedbackPage/>} />
+      <Route path="addproduct" index element={<AddProduct/>} />
+      <Route path="users" index element={<UsersManagementPage/>} />
     </Route>
     
   </Route>
