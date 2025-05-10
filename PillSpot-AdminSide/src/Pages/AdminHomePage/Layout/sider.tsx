@@ -33,14 +33,17 @@ const Sider = () => {
         <BsBuildingFillGear className={iconStyle} />
       </NavLink>
       
-      <NavLink to={"#"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Staff Management">
+      <NavLink to={"users"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Users Management">
         <FaUsersGear className={iconStyle} />
       </NavLink>
 
-      <NavLink to={"#"}>
+      <NavLink to={"feedback"}>
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
       <NavLink to={"#"}>
+        <MdSpaceDashboard className={iconStyle} />
+      </NavLink>
+      <NavLink to={"addproduct"}>
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
     </aside>
