@@ -46,107 +46,115 @@ const PharInfo = () => {
     URL.revokeObjectURL(link.href);
   };
 
+  const onSubmit = (data: PharType) => {
+    console.log(data);
+    // Handle form submission here
+  };
+
   return (
-    <form
-      className="flex flex-bol gap-5 w-full"
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <div className="flex-1 flex-col dark:text-black">
-        <div className=" flex  flex-col items-center">
-          <TextInput
-            name="name"
-            label="Pharmacy Name"
-            register={register}
-            errors={errors}
-          ></TextInput>
-          <TextInput
-            name="contactNumber"
-            label="Contact Number"
-            register={register}
-            errors={errors}
-          ></TextInput>
-          <TextInput
-            name="licenceId"
-            label="Licence Id"
-            register={register}
-            errors={errors}
-          ></TextInput>
-
-          <TextInput
-            name="governorate"
-            label="Governorate"
-            register={register}
-            errors={errors}
-          ></TextInput>
-          <TextInput
-            name="city"
-            label="City"
-            register={register}
-            errors={errors}
-          ></TextInput>
-          <TextInput
-            name="timeOpen"
-            label="Opening Time"
-            register={register}
-            errors={errors}
-            type={"time"}
-          ></TextInput>
-          <TextInput
-            name="timeClose"
-            label="Closing Time"
-            register={register}
-            errors={errors}
-            type={"time"}
-          ></TextInput>
-          <div className="flex gap-2 mt-5 ">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="checkbox"
-              id="open24"
+    <div className="h-[calc(88vh-9rem)] py-10 px-4 sm:px-6 lg:px-10 dark:text-gray-900 overflow-y-auto">
+      <form
+        className="flex flex-col lg:flex-row gap-5 w-full"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {/* Image Section */}
+        <div className="w-full lg:w-1/3 flex flex-col items-center gap-4 p-4">
+          <div className="rounded-lg p-4 flex items-center justify-center">
+            <img
+              src="/6567dfgh.png"
+              className="w-48 h-48 sm:w-60 sm:h-60 rounded-full object-cover"
+              alt="Preview"
             />
-            <label htmlFor="open24">My Pharmacy works all 24 Hour</label>
+          </div>
+          <div className="flex justify-center gap-4">
+            <button type="button" className="btn font-semibold px-4 py-2 rounded transition">
+              Remove
+            </button>
+            <button type="button" className="btn font-semibold px-4 py-2 rounded transition">
+              Update
+            </button>
+          </div>
+
+          <div className="flex items-center gap-5">
+            <input
+              type="file"
+              className="file-input w-full max-w-xs"
+              onChange={handleFileChange}
+            />
+            <button type="button" onClick={handleDownload}>
+              <BsDownload className="text-2xl cursor-pointer" />
+            </button>
+          </div>
+
+          <div className="mt-8 lg:mt-40">
+            <button type="submit" className="btn bg-blue-200 text-base-200 flex itemstar justify-end">
+              save changes
+            </button>
           </div>
         </div>
-      </div>
 
-      <div className="flex-1 flex flex-col items-center gap-4 p-4">
-        <div className="rounded-lg p-4 flex items-center justify-center">
-          <img
-            src="/6567dfgh.png"
-            className="w-60 h-60 rounded-full object-cover"
-            alt="Preview"
-          />
-        </div>
-        <div className="flex justify-center gap-4">
-          <button className="btn  font-semibold px-4 py-2 rounded transition">
-            Remove
-          </button>
-          <button className="btn  font-semibold px-4 py-2 rounded transition">
-            Update
-          </button>
-        </div>
+        {/* Form Fields Section */}
+        <div className="w-full lg:w-2/3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <TextInput
+              name="name"
+              label="Pharmacy Name"
+              register={register}
+              errors={errors}
+            ></TextInput>
+            <TextInput
+              name="contactNumber"
+              label="Contact Number"
+              register={register}
+              errors={errors}
+            ></TextInput>
+            <TextInput
+              name="licenceId"
+              label="Licence Id"
+              register={register}
+              errors={errors}
+            ></TextInput>
 
-        <div className="flex items-center gap-5">
-          <input
-            type="file"
-            className="file-input"
-            onChange={handleFileChange}
-          />
-          <button onClick={handleDownload}>
-            <BsDownload className="text-2xl cursor-pointer" />
-          </button>
-        </div>
+            <TextInput
+              name="governorate"
+              label="Governorate"
+              register={register}
+              errors={errors}
+            ></TextInput>
+            <TextInput
+              name="city"
+              label="City"
+              register={register}
+              errors={errors}
+            ></TextInput>
+            <TextInput
+              name="timeOpen"
+              label="Opening Time"
+              register={register}
+              errors={errors}
+              type={"time"}
+            ></TextInput>
+            <TextInput
+              name="timeClose"
+              label="Closing Time"
+              register={register}
+              errors={errors}
+              type={"time"}
+            ></TextInput>
 
-        <div className="mt-40">
-          <div className="btn bg-blue-200 text-base-200 flex itemstar justify-end">
-            save changes
+            <div className="flex gap-2 mt-5 col-span-1 sm:col-span-2">
+              <input
+                type="checkbox"
+                {...register("isOpen24")}
+                className="checkbox"
+                id="open24"
+              />
+              <label htmlFor="open24">My Pharmacy works all 24 Hour</label>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
