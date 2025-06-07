@@ -1,5 +1,5 @@
 
-import { SubmitHandler, useForm } from "react-hook-form";
+
 import PharmacyCard from "../../../components/PharmacyCard/PharmacyCard";
 import PreviewCard from "../Dashboard/PreviewCard";
 import PharHeader from "./header";
@@ -19,7 +19,7 @@ const Pharmacy = () => {
         <PreviewCard w={20} h={44} title="Result :">
           <PharmacyCard />
           <PharmacyCard />
-          <PharmacyCard />
+        
           <PharmacyCard />
         
         </PreviewCard>

@@ -10,29 +10,43 @@ const PharmacyCard = () => {
 
   useEffect(() => {
     if (theme === "light") {
-      setColors("bg-gray-300 text-gray-700");
+      setColors("bg-gray-100 hover:bg-gray-200 text-gray-700 shadow-sm");
     } else {
-      setColors("bg-[#2C3745] text-white");
+      setColors("bg-[#2C3745] hover:bg-[#37475A] text-white shadow-md");
     }
   }, [theme]);
+
   return (
     <div
-      className={`min-h-[9vh] w-full rounded-xl py-2 px-5 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 ${colors} mb-2`}
+      className={`w-full rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 ${colors} transition-all duration-300 mb-3`}
     >
       {/* Image and Pharmacy Info */}
-      <div className="flex items-center justify-center gap-3">
-        <img src="/vite.svg" alt="pharmacy-image" className="w-16" />
-        <div className="text-center md:text-left">
-          <h2 className="text-base md:text-lg font-semibold">
+      <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0">
+          <img 
+            src="/vite.svg" 
+            alt="pharmacy-image" 
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+        <div className="flex flex-col items-center sm:items-start">
+          <h2 className="text-base sm:text-lg font-semibold mb-1">
             PHarmacy el pharmacy
           </h2>
-          <h2 className="text-sm md:text-base text-gray-600">12312312312</h2>
+          <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+            12312312312
+          </p>
         </div>
       </div>
 
       {/* Link and Rating */}
-      <div className="flex items-center justify-center">
-        <FaLink className="text-3xl md:text-4xl cursor-pointer hover:scale-110 duration-200" />
+      <div className="flex items-center justify-center w-full sm:w-auto">
+        <button 
+          className="p-2 rounded-lg hover:bg-opacity-10 hover:bg-gray-500 transition-all duration-200"
+          aria-label="View pharmacy details"
+        >
+          <FaLink className="text-2xl sm:text-3xl" />
+        </button>
       </div>
     </div>
   );
