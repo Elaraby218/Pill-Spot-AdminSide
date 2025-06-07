@@ -37,9 +37,24 @@ const PharOrders = () => {
     return dateInRange && statusMatch;
   });
 
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'complete':
+        return 'border-green-400';
+      case 'pending':
+        return 'border-yellow-400';
+      case 'reject':
+        return 'border-red-400';
+      case 'approved':
+        return 'border-blue-400';
+      default:
+        return 'border-gray-400';
+    }
+  };
+
   const renderOrderRow = (order: Order) => (
-    <tr key={order.id} className="my-2 hover:scale-102 duration-300 hover:bg-[#aaaaaa27] dark:bg-gray-300 dark:text-gray-700">
-      <td className="px-4 py-2 border-l-4 border-green-400">{order.id}</td>
+    <tr key={order.id} className={`my-2 duration-300 hover:bg-[#aaaaaa27] dark:bg-gray-300 dark:text-gray-700`}>
+      <td className={`px-4 py-2 border-l-4 ${getStatusColor(order.status)}`}>{order.id}</td>
       <td className={thStyle}>{order.date}</td>
       <td className={thStyle}>{order.customer}</td>
       <td className={thStyle}>{order.phone}</td>
