@@ -12,9 +12,10 @@ import AdminLogin from "../Pages/LoginPage";
 import HomePageLayout from "../Pages/AdminHomePage/Layout";
 import AdminDashBoard from "../Pages/AdminHomePage/Dashboard/indes";
 import Pharmacy from "../Pages/AdminHomePage/Pharmacy";
-import FeedbackPage from "../Pages/AdminHomePage/Pharmacy/FeedBackPage";
+
 import AddProduct from "../Pages/addProduct";
 import UsersManagementPage from "../Pages/Users Management Page";
+import FeedbackPage from "../Pages/AdminHomePage/FeedBackPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
