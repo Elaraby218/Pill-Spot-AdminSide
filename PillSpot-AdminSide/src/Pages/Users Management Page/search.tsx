@@ -46,7 +46,7 @@ const Search = ({ onUserSelect }: SearchProps) => {
         className="input input-bordered"
         required
       />
-      <button type="submit" className="btn btn-primary" disabled={loading}>
+      <button type="submit" className="btn btn-primary light:bg-red-400" disabled={loading}>
         {loading ? 'Searching...' : 'Search'}
       </button>
       {error && <span className="text-red-500 ml-2">{error}</span>}

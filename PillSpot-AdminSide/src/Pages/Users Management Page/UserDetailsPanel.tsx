@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../App/Store';
 
 interface User {
   id: string;
@@ -31,6 +33,7 @@ interface UserFormValues {
 }
 
 const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated, onUserDeleted }) => {
+  const theme = useSelector((state: RootState) => state.ThemeSlice.theme);
   const [lockout, setLockout] = useState(false); // You may want to fetch this from user object if available
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -132,7 +135,9 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
 
   return (
     <div className="flex items-center justify-center gap-5">
-      <div className="w-full flex-[3] mx-auto bg-[#232B36] rounded-2xl p-6 shadow space-y-6">
+      <div className={`w-full flex-[3] mx-auto rounded-2xl p-6 shadow space-y-6 ${
+        theme === 'dark' ? 'bg-[#232B36]' : 'bg-white'
+      }`}>
         <div className="flex flex-col items-center">
           <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-purple-500 to-yellow-400 flex items-center justify-center text-4xl font-bold text-white mb-2 overflow-hidden">
             {user.avatarUrl ? (
@@ -141,35 +146,63 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
               user.userName[0].toUpperCase()
             )}
           </div>
-          <div className="text-xl font-bold text-white mb-1">{user.userName}</div>
+          <div className={`text-xl font-bold mb-1 ${
+            theme === 'dark' ? 'text-white' : 'text-gray-800'
+          }`}>
+            {user.userName}
+          </div>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-white font-semibold">First Name</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                First Name
+              </label>
               <input
                 type="text"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('firstName', { required: 'First name is required' })}
                 placeholder="First Name"
               />
               {errors.firstName && <span className="text-red-400 text-sm">{errors.firstName.message}</span>}
             </div>
             <div>
-              <label className="block text-white font-semibold">Last Name</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Last Name
+              </label>
               <input
                 type="text"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('lastName', { required: 'Last name is required' })}
                 placeholder="Last Name"
               />
               {errors.lastName && <span className="text-red-400 text-sm">{errors.lastName.message}</span>}
             </div>
             <div className="md:col-span-2">
-              <label className="block text-white font-semibold">Phone</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Phone
+              </label>
               <input
                 type="tel"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('phone', {
                   required: 'Phone is required',
                   minLength: { value: 8, message: 'Phone must be at least 8 digits' },
@@ -179,33 +212,56 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
               {errors.phone && <span className="text-red-400 text-sm">{errors.phone.message}</span>}
             </div>
             <div className="md:col-span-2">
-              <label className="block text-white font-semibold">Gender</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Gender
+              </label>
               <select
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('gender', { required: 'Gender is required' })}
               >
                 <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
-                <option value="other">Other</option>
               </select>
               {errors.gender && <span className="text-red-400 text-sm">{errors.gender.message}</span>}
             </div>
             <div className="md:col-span-2">
-              <label className="block text-white font-semibold">Birthdate</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Birthdate
+              </label>
               <input
                 type="date"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('birthdate', { required: 'Birthdate is required' })}
                 placeholder="Birthdate"
               />
               {errors.birthdate && <span className="text-red-400 text-sm">{errors.birthdate.message}</span>}
             </div>
             <div className="md:col-span-2">
-              <label className="block text-white font-semibold">Email</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Email
+              </label>
               <input
                 type="email"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
@@ -218,10 +274,18 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
               {errors.email && <span className="text-red-400 text-sm">{errors.email.message}</span>}
             </div>
             <div className="md:col-span-2">
-              <label className="block text-white font-semibold">Role</label>
+              <label className={`block font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-700'
+              }`}>
+                Role
+              </label>
               <input
                 type="text"
-                className="input input-bordered w-full bg-[#1A2028] text-white"
+                className={`input input-bordered w-full ${
+                  theme === 'dark' 
+                    ? 'bg-[#1A2028] text-white' 
+                    : 'bg-gray-50 text-gray-900 border-gray-300'
+                }`}
                 {...register('role', { required: 'Role is required' })}
                 placeholder="Role"
               />
@@ -229,23 +293,67 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
             </div>
           </div>
           <div className="flex items-center gap-4 mt-2">
-            <span className="text-white font-semibold">Lockout Status:</span>
+            <span className={`font-semibold ${
+              theme === 'dark' ? 'text-white' : 'text-gray-700'
+            }`}>
+              Lockout Status:
+            </span>
             <span className={lockout ? 'text-red-400' : 'text-green-400'}>
               {lockout ? 'Locked' : 'Active'}
             </span>
           </div>
-          <button type="submit" className="w-full h-12 mt-6 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition" disabled={loading}>
+          <button 
+            type="submit" 
+            className={`w-full h-12 mt-6 rounded-2xl transition ${
+              theme === 'dark'
+                ? 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-blue-500 hover:bg-blue-600'
+            } text-white`}
+            disabled={loading}
+          >
             {loading ? 'Updating...' : 'Update'}
           </button>
           {message && <div className="text-green-400 font-semibold mt-2">{message}</div>}
           {error && <div className="text-red-400 font-semibold mt-2">{error}</div>}
         </form>
       </div>
-      <div className="w-full flex flex-col flex-[1] mx-auto bg-[#232B36] rounded-2xl p-6 shadow space-y-6">
+      <div className={`w-full flex flex-col flex-[1] mx-auto rounded-2xl p-6 shadow space-y-6 ${
+        theme === 'dark' ? 'bg-[#232B36]' : 'bg-white'
+      }`}>
         <div className="flex flex-wrap gap-3 mt-4 flex-col justify-around h-[50vh]">
-          <button onClick={handleLockout} className="w-3xs h-20 bg-base-100 rounded-2xl hover:bg-base-200 duration-300 cursor-pointer" disabled={loading || lockout}>Lockout</button>
-          <button onClick={handleUnlock} className="w-3xs h-20 bg-base-100 rounded-2xl hover:bg-base-200 duration-300 cursor-pointer" disabled={loading || !lockout}>Unlock</button>
-          <button onClick={handleDelete} className="w-3xs h-20 bg-base-100 rounded-2xl hover:bg-base-200 duration-300 cursor-pointer" disabled={loading}>Delete</button>
+          <button 
+            onClick={handleLockout} 
+            className={`w-3xs h-20 rounded-2xl duration-300 cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-[#1A2028] hover:bg-[#2C3745]'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
+            disabled={loading || lockout}
+          >
+            Lockout
+          </button>
+          <button 
+            onClick={handleUnlock} 
+            className={`w-3xs h-20 rounded-2xl duration-300 cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-[#1A2028] hover:bg-[#2C3745]'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
+            disabled={loading || !lockout}
+          >
+            Unlock
+          </button>
+          <button 
+            onClick={handleDelete} 
+            className={`w-3xs h-20 rounded-2xl duration-300 cursor-pointer ${
+              theme === 'dark'
+                ? 'bg-[#1A2028] hover:bg-[#2C3745]'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
+            disabled={loading}
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
