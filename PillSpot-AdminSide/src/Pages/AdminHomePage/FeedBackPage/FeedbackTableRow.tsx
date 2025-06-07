@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../App/Store';
+import { useNavigate } from 'react-router-dom';
 
 interface Complaint {
   id: string;
@@ -17,11 +18,19 @@ interface FeedbackTableRowProps {
 
 const FeedbackTableRow: React.FC<FeedbackTableRowProps> = ({ complaint }) => {
   const theme = useSelector((state: RootState) => state.ThemeSlice.theme);
+  const navigate = useNavigate();
+
+  const handleRowClick = () => {
+    navigate(`/admin-home/feedback/${complaint.id}`);
+  };
 
   return (
-    <div className={`grid grid-cols-7 gap-4 p-4 mb-2 rounded-lg items-center text-sm ${
-      theme === 'dark' ? 'bg-[#232B36] hover:bg-[#2C3745] text-white' : 'bg-white hover:bg-gray-50 text-gray-800 shadow-sm border border-gray-200'
-    } transition-colors duration-300`}>
+    <div 
+      className={`grid grid-cols-7 gap-4 p-4 mb-2 rounded-lg items-center text-sm cursor-pointer ${
+        theme === 'dark' ? 'bg-[#232B36] hover:bg-[#2C3745] text-white' : 'bg-white hover:bg-gray-50 text-gray-800 shadow-sm border border-gray-200'
+      } transition-colors duration-300`}
+      onClick={handleRowClick}
+    >
       <div className="font-medium">#{complaint.id}</div>
       <div>{complaint.userName}</div>
       <div>{complaint.lastComplainDate}</div>

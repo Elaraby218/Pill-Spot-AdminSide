@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+@import "quill/dist/quill.bubble.css";
+
 @custom-variant dark (&:where([data-theme=light], [data-theme=light] *));
 
 /* @plugin "daisyui";

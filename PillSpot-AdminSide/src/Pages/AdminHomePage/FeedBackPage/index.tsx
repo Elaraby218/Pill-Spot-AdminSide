@@ -44,6 +44,7 @@ const FeedbackPage = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
 
   const sortedComplaints = [...complaints].sort((a, b) => {
     if (sortKey === 'default') {
@@ -73,8 +74,9 @@ const FeedbackPage = () => {
                               complaint.id.includes(searchTerm);
 
     const matchesDate = selectedDate === null || new Date(complaint.lastComplainDate).toISOString().split('T')[0] === selectedDate;
+    const matchesStatus = selectedStatus === null || complaint.status === selectedStatus;
 
-    return matchesSearchTerm && matchesDate;
+    return matchesSearchTerm && matchesDate && matchesStatus;
   });
 
   const handleSort = (key: SortKeys) => {
@@ -89,6 +91,7 @@ const FeedbackPage = () => {
   const handleResetFilters = () => {
     setSearchTerm('');
     setSelectedDate(null);
+    setSelectedStatus(null);
   };
 
   return (
@@ -121,6 +124,33 @@ const FeedbackPage = () => {
         >
           Reset Filters
         </button>
+        <div className={`flex flex-wrap justify-center gap-3 ${
+          theme === 'dark' ? 'text-white' : 'text-gray-800'
+        }`}>
+          <button
+            onClick={() => setSelectedStatus(null)}
+            className={`px-4 py-2 rounded-md font-semibold ${
+              selectedStatus === null
+                ? theme === 'dark' ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
+                : theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+            } transition`}
+          >
+            All
+          </button>
+          {[ 'Pending', 'Resolved', 'Open' ].map(status => (
+            <button
+              key={status}
+              onClick={() => setSelectedStatus(status)}
+              className={`px-4 py-2 rounded-md font-semibold ${
+                selectedStatus === status
+                  ? theme === 'dark' ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'
+                  : theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
+              } transition`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className={`w-full rounded-xl shadow-lg overflow-hidden ${
