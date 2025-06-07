@@ -20,14 +20,16 @@ const PharInfo = () => {
   const [fileContent, setFileContent] = useState("");
   const [fileName, setFileName] = useState("");
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setFileName(file.name);
     const reader = new FileReader();
-    reader.onload = (event) => {
-      setFileContent(event.target.result);
+    reader.onload = (event: ProgressEvent<FileReader>) => {
+      if (event.target?.result && typeof event.target.result === 'string') {
+        setFileContent(event.target.result);
+      }
     };
     reader.readAsText(file);
   };
