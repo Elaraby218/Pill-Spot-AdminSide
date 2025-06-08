@@ -1,4 +1,4 @@
-import PharmacyCard from "../../../components/PharmacyCard/PharmacyCard";
+// import PharmacyCard from "../../../components/PharmacyCard/PharmacyCard";
 import TODO from "../../../components/TODO";
 import InfoCard from "./InfoCard";
 import PreviewCard from "./PreviewCard";
@@ -42,12 +42,13 @@ const AdminDashBoard = () => {
 
         <div className="flex gap-5 items-center justify-center w-full max-w-[89vw] overflow-auto ">
           <PreviewCard w={30} title="Last Joined Pharmcies">
+            {/* <PharmacyCard />
             <PharmacyCard />
             <PharmacyCard />
             <PharmacyCard />
             <PharmacyCard />
-            <PharmacyCard />
-            <PharmacyCard />
+            <PharmacyCard /> */}
+            hello
           </PreviewCard>
 
           <PreviewCard w={40} title="TODO Tasks">

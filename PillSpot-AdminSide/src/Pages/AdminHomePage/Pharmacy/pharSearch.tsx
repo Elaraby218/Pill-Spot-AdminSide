@@ -1,22 +1,45 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextInput from "../../../components/input";
 import PreviewCard from "../Dashboard/PreviewCard";
+import axiosInstance from "../../../axiosInstance";
+import { useTransaction } from "../../../hooks/useTransaction";
+import { IPharmacy } from "./types";
+
 type TFormIntput = {
   pharmacyName: string;
   cityName: string;
   governorate: string;
 };
 
-const PharSearch = () => {
+interface Iprops {
+  setPharmacies: React.Dispatch<React.SetStateAction<IPharmacy[] | undefined>>;
+}
+
+const PharSearch = ({ setPharmacies }: Iprops) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TFormIntput>();
 
-  const getPhars: SubmitHandler<TFormIntput> = (data) => {
-    console.log(data);
+  const { execute, loading, error } = useTransaction<IPharmacy[]>();
+
+  const getPhars: SubmitHandler<TFormIntput> = async (data) => {
+    try {
+      const searchTerm = `${data.pharmacyName}`.trim();
+      const response = await execute(
+        axiosInstance.get<IPharmacy[]>(`/api/pharmacies/AllPharmacies`, {
+          params: {
+            SearchTerm: searchTerm
+          }
+        }).then(res => res.data)
+      );
+      setPharmacies(response);
+    } catch (error) {
+      console.error('Error searching pharmacies:', error);
+    }
   };
+
   return (
     <PreviewCard w={20} h={40} title="Pharmacy Search :">
       <form
@@ -24,21 +47,21 @@ const PharSearch = () => {
         onSubmit={handleSubmit(getPhars)}
       >
         <TextInput
-          name="Name"
+          name="pharmacyName"
           type="text"
           label="Name"
           register={register}
           errors={errors}
         />
         <TextInput
-          name="city"
+          name="cityName"
           type="text"
           label="city"
           register={register}
           errors={errors}
         />
         <TextInput
-          name="Governorate"
+          name="governorate"
           type="text"
           label="Governorate"
           register={register}
@@ -47,9 +70,11 @@ const PharSearch = () => {
         <button
           type="submit"
           className="btn mt-2 flex items-center rounded-3xl p-5 border-1 border-gray-700"
+          disabled={loading}
         >
-          Search
+          {loading ? 'Searching...' : 'Search'}
         </button>
+        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </PreviewCard>
   );
