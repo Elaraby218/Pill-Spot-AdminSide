@@ -2,7 +2,10 @@
 import LangSlice from "../Featurs/Lang/lang";
 import authLoginSlice from "../Featurs/AuthLogin/auth";
 import curUserSlice from "../Featurs/User/CurUser";
-import  ThemeSlice  from "../Featurs/Theme/theme";
+import ThemeSlice from "../Featurs/Theme/theme";
+import pharmacySlice from "../Featurs/pharmacy/getAll";
+import editPharmacySlice from "../Featurs/pharmacy/editPhar";
+import pharmacyEmployeesSlice from "../Featurs/pharmacy/getPharEmps";
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 
 import {
@@ -30,7 +33,10 @@ const rootReducer = combineReducers({
   langSlice: LangSlice,
   authLoginSlice: authLoginSlice,
   curUserSlice: persistedCurUserReducer,
-  ThemeSlice:persistedThemeReducer,
+  ThemeSlice: persistedThemeReducer,
+  pharmacySlice: pharmacySlice,
+  editPharmacySlice: editPharmacySlice,
+  pharmacyEmployeesSlice: pharmacyEmployeesSlice,
 })
 
 export const store = configureStore({

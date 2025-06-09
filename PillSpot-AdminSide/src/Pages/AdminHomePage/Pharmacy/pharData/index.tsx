@@ -6,16 +6,24 @@ import { IPharmacy } from "../types";
 
 interface PharDataProps {
   pharmacy?: IPharmacy;
+  onPharmacyUpdate?: (updatedPharmacy: IPharmacy) => void;
 }
 
-const PharData = ({ pharmacy }: PharDataProps) => {
+const PharData = ({ pharmacy, onPharmacyUpdate }: PharDataProps) => {
   const [active, setActive] = useState(0);
 
-  const pages = [
-    <PharInfo key="info" pharmacy={pharmacy} />, 
-    <PharStaff key="staff" pharmacyId={pharmacy?.pharmacyId} />, 
-    <PharOrders key="orders" />
-  ];
+  const renderPage = () => {
+    switch (active) {
+      case 0:
+        return <PharInfo pharmacy={pharmacy} onPharmacyUpdate={onPharmacyUpdate} />;
+      case 1:
+        return <PharStaff pharmacyId={pharmacy?.pharmacyId} />;
+      case 2:
+        return <PharOrders />;
+      default:
+        return null;
+    }
+  };
  
   return (
     <>
@@ -37,7 +45,7 @@ const PharData = ({ pharmacy }: PharDataProps) => {
           ))}
         </div>
       </div>
-      {pharmacy ? pages[active] : (
+      {pharmacy ? renderPage() : (
         <div className="flex items-center justify-center h-full">
           <p className="text-xl text-gray-500">Select a pharmacy to view details</p>
         </div>

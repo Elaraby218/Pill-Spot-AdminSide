@@ -12,6 +12,16 @@ const Pharmacy = () => {
   const handlePharmacySelect = (pharmacy: IPharmacy) => {
     setSelectedPharmacy(pharmacy);
   };
+
+  const handlePharmacyUpdate = (updatedPharmacy: IPharmacy) => {
+    setSelectedPharmacy(updatedPharmacy);
+    
+    if (pharmacies) {
+      setPharmacies(pharmacies.map(pharmacy => 
+        pharmacy.pharmacyId === updatedPharmacy.pharmacyId ? updatedPharmacy : pharmacy
+      ));
+    }
+  };
   
   return (
     <div className="flex items-center justify-center gap-10">
@@ -34,7 +44,10 @@ const Pharmacy = () => {
         <PreviewCard w={65} h={86} title="">
           <div className="flex flex-col items-center justify-center text-white gap-5">
             <div className="w-full">
-              <PharData pharmacy={selectedPharmacy}/>
+              <PharData 
+                pharmacy={selectedPharmacy}
+                onPharmacyUpdate={handlePharmacyUpdate}
+              />
             </div>
           </div>
         </PreviewCard>

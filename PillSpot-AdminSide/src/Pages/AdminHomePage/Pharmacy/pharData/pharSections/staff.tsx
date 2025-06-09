@@ -1,42 +1,41 @@
 import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
-import { useTransaction } from "../../../../../hooks/useTransaction";
-import axiosInstance from "../../../../../axiosInstance";
-import { Employee } from "../../types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../../../App/Store";
+import { getPharmacyEmployees } from "../../../../../Featurs/pharmacy/getPharEmps";
+
 
 interface Iprops {
   pharmacyId: string | undefined;
 }
 
+const ROLES = ["All Roles", "Manager", "Pharmacist", "Assistant"] as const;
+
 const PharStaff = ({ pharmacyId }: Iprops) => {
-  const { execute, loading, error, data: employees } = useTransaction<Employee[]>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { employees, status, message } = useSelector((state: RootState) => state.pharmacyEmployeesSlice);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
 
-console.log(pharmacyId)
-
   useEffect(() => {
     if (pharmacyId) {
-      fetchEmployees();
+       dispatch(getPharmacyEmployees(pharmacyId));
     }
-  }, [pharmacyId]);
-
-  const fetchEmployees = async () => {
-    try {
-      await execute(
-        axiosInstance.get<Employee[]>(`/api/pharmacy-employees/${pharmacyId}/employees`)
-          .then(res => res.data)
-      );
-    } catch (error) {
-      console.error('Error fetching employees:', error);
-    }
-  };
+  }, [pharmacyId, dispatch]);
 
   const filteredEmployees = employees?.filter(employee => {
     const matchesSearch = `${employee.firstName} ${employee.lastName}`.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = !selectedRole || employee.role === selectedRole;
     return matchesSearch && matchesRole;
   });
+
+  if (!pharmacyId) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <p className="text-gray-500">Select a pharmacy to view staff</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -68,33 +67,28 @@ console.log(pharmacyId)
             tabIndex={0}
             className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
           >
-            <li>
-              <a onClick={() => setSelectedRole("")}>All Roles</a>
-            </li>
-            <li>
-              <a onClick={() => setSelectedRole("Manager")}>Manager</a>
-            </li>
-            <li>
-              <a onClick={() => setSelectedRole("Pharmacist")}>Pharmacist</a>
-            </li>
-            <li>
-              <a onClick={() => setSelectedRole("Assistant")}>Assistant</a>
-            </li>
+            {ROLES.map((role) => (
+              <li key={role}>
+                <a onClick={() => setSelectedRole(role === "All Roles" ? "" : role)}>
+                  {role}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
 
-      {loading ? (
+      {status === "loading" ? (
         <div className="flex justify-center items-center h-40">
           <span className="loading loading-spinner loading-lg"></span>
         </div>
-      ) : error ? (
-        <div className="text-red-500 mt-4">{error}</div>
+      ) : status === "error" ? (
+        <div className="text-red-500 mt-4">{message}</div>
       ) : (
         <div className="flex gap-5 flex-wrap items-center justify-center">
           {filteredEmployees?.map((employee) => (
             <UserCard
-              key={employee.id}
+              key={employee.id+pharmacyId}
               employee={employee}
               onDelete={() => {/* Handle delete */}}
               onEdit={() => {/* Handle edit */}}

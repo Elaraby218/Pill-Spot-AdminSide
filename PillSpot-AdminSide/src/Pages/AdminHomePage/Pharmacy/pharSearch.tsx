@@ -1,9 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import TextInput from "../../../components/input";
 import PreviewCard from "../Dashboard/PreviewCard";
-import axiosInstance from "../../../axiosInstance";
-import { useTransaction } from "../../../hooks/useTransaction";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../App/Store";
+import { getAllPharmacies } from "../../../Featurs/pharmacy/getAll";
 import { IPharmacy } from "./types";
+import { useEffect } from "react";
 
 type TFormIntput = {
   pharmacyName: string;
@@ -16,25 +18,25 @@ interface Iprops {
 }
 
 const PharSearch = ({ setPharmacies }: Iprops) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { pharmacies, status } = useSelector((state: RootState) => state.pharmacySlice);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TFormIntput>();
 
-  const { execute, loading, error } = useTransaction<IPharmacy[]>();
+  useEffect(() => {
+    if (pharmacies) {
+      setPharmacies(pharmacies);
+    }
+  }, [pharmacies, setPharmacies]);
 
   const getPhars: SubmitHandler<TFormIntput> = async (data) => {
     try {
       const searchTerm = `${data.pharmacyName}`.trim();
-      const response = await execute(
-        axiosInstance.get<IPharmacy[]>(`/api/pharmacies/AllPharmacies`, {
-          params: {
-            SearchTerm: searchTerm
-          }
-        }).then(res => res.data)
-      );
-      setPharmacies(response);
+      await dispatch(getAllPharmacies({ SearchTerm: searchTerm }));
     } catch (error) {
       console.error('Error searching pharmacies:', error);
     }
@@ -70,11 +72,11 @@ const PharSearch = ({ setPharmacies }: Iprops) => {
         <button
           type="submit"
           className="btn mt-2 flex items-center rounded-3xl p-5 border-1 border-gray-700"
-          disabled={loading}
+          disabled={status === "loading"}
         >
-          {loading ? 'Searching...' : 'Search'}
+          {status === "loading" ? 'Searching...' : 'Search'}
         </button>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {status === "error" && <p className="text-red-500 mt-2">Error searching pharmacies</p>}
       </form>
     </PreviewCard>
   );
