@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../../App/Store';
-import { addCategory, getAllCategories, ICategory } from '../../../Featurs/category/categorySlice';
+import { addCategory, deleteCategory, getAllCategories, ICategory } from '../../../Featurs/category/categorySlice';
 import { toast } from 'sonner';
 
-const Category = () => {
+interface CategoryProps {
+  selectedCategory: ICategory | null;
+  onSelectCategory: (category: ICategory | null) => void;
+}
+
+const Category: React.FC<CategoryProps> = ({ selectedCategory, onSelectCategory }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { categories = [], status } = useSelector((state: RootState) => state.categorySlice);
   const [categoryName, setCategoryName] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCategories, setFilteredCategories] = useState<ICategory[]>([]);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('Fetching categories...');
@@ -45,12 +51,32 @@ const Category = () => {
       console.log('Category added:', result);
       setCategoryName('');
       toast.success('Category added successfully');
-      // Refresh the categories list after adding
       dispatch(getAllCategories());
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to add category';
       console.error('Error adding category:', error);
       toast.error(errorMessage);
+    }
+  };
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      setIsDeleting(categoryId);
+      try {
+        await dispatch(deleteCategory(categoryId)).unwrap();
+        toast.success('Category deleted successfully');
+        dispatch(getAllCategories());
+        // Clear selection if the deleted category was selected
+        if (selectedCategory?.categoryId === categoryId) {
+          onSelectCategory(null);
+        }
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Failed to delete category';
+        console.error('Error deleting category:', error);
+        toast.error(errorMessage);
+      } finally {
+        setIsDeleting(null);
+      }
     }
   };
 
@@ -105,8 +131,13 @@ const Category = () => {
               </tr>
             ) : (
               filteredCategories.map((category) => (
-                <React.Fragment key={category.id}>
-                  <tr className="bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-600">
+                <React.Fragment key={category.categoryId}>
+                  <tr 
+                    className={`bg-gray-800 text-white dark:bg-gray-200 dark:text-gray-600 cursor-pointer hover:bg-gray-700 dark:hover:bg-gray-300 ${
+                      selectedCategory?.categoryId === category.categoryId ? 'bg-gray-700 dark:bg-gray-400' : ''
+                    }`}
+                    onClick={() => onSelectCategory(category)}
+                  >
                     <td className="px-4 py-2">{category.name}</td>
                     <td className="px-4 py-2">
                       <button className="text-blue-400 hover:underline">
@@ -114,8 +145,15 @@ const Category = () => {
                       </button>
                     </td>
                     <td className="px-4 py-2">
-                      <button className="text-red-400 hover:underline">
-                        Delete
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteCategory(category.categoryId);
+                        }}
+                        disabled={isDeleting === category.categoryId}
+                        className={`text-red-400 hover:underline ${isDeleting === category.categoryId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        {isDeleting === category.categoryId ? 'Deleting...' : 'Delete'}
                       </button>
                     </td>
                   </tr>

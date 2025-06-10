@@ -3,18 +3,20 @@ import { AxiosError } from "axios";
 import axiosInstance from "../../axiosInstance";
 
 export interface ICategory {
-  id: string;
+  categoryId: string;
   name: string;
 }
 
 interface ICategoryState {
   categories: ICategory[];
+  selectedCategory: ICategory | null;
   status: "idle" | "loading" | "error" | "success";
   message: string;
 }
 
 const initialState: ICategoryState = {
   categories: [],
+  selectedCategory: null,
   status: "idle",
   message: "",
 };
@@ -65,6 +67,27 @@ export const addCategory = createAsyncThunk(
   }
 );
 
+export const deleteCategory = createAsyncThunk(
+  "category/delete",
+  async (categoryId: string, thunkAPI) => {
+    try {
+      console.log('Deleting category:', categoryId);
+      await axiosInstance.delete(`/api/categories/${categoryId}`);
+      return categoryId;
+    } catch (err) {
+      console.error('Error in deleteCategory:', err);
+      if (err instanceof AxiosError) {
+        const message =
+          (err.response && err.response.data && err.response.data.message) ||
+          err.message ||
+          err.toString();
+        return thunkAPI.rejectWithValue(message);
+      }
+      return thunkAPI.rejectWithValue("An unknown error occurred");
+    }
+  }
+);
+
 const categorySlice = createSlice({
   name: "category",
   initialState,
@@ -72,6 +95,12 @@ const categorySlice = createSlice({
     resetCategoryState: (state) => {
       state.status = "idle";
       state.message = "";
+    },
+    setSelectedCategory: (state, action) => {
+      state.selectedCategory = action.payload;
+    },
+    clearSelectedCategory: (state) => {
+      state.selectedCategory = null;
     },
   },
   extraReducers: (builder) => {
@@ -107,9 +136,29 @@ const categorySlice = createSlice({
         console.log('addCategory rejected:', action.payload);
         state.status = "error";
         state.message = action.payload as string;
+      })
+      // Delete Category
+      .addCase(deleteCategory.pending, (state) => {
+        console.log('deleteCategory pending');
+        state.status = "loading";
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        console.log('deleteCategory fulfilled:', action.payload);
+        state.status = "success";
+        state.categories = state.categories.filter(cat => cat.categoryId !== action.payload);
+        // Clear selected category if it was deleted
+        if (state.selectedCategory?.categoryId === action.payload) {
+          state.selectedCategory = null;
+        }
+        state.message = "";
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        console.log('deleteCategory rejected:', action.payload);
+        state.status = "error";
+        state.message = action.payload as string;
       });
   },
 });
 
-export const { resetCategoryState } = categorySlice.actions;
+export const { resetCategoryState, setSelectedCategory, clearSelectedCategory } = categorySlice.actions;
 export default categorySlice.reducer; 

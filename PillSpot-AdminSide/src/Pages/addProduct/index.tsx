@@ -3,9 +3,13 @@ import Category from "./category/category";
 import SubCategoy from "./category/subCategory";
 import AddMedcine from "./ProductPage";
 import CosmeticPage from "./CosmeticPage";
+import { ICategory } from "../../Featurs/category/categorySlice";
 
 const AddProduct = () => {
   const [activeButton, setActiveButton] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
+
+  console.log(selectedCategory);
 
   const handleClick = (buttonName: string) => {
     setActiveButton(buttonName);
@@ -13,8 +17,8 @@ const AddProduct = () => {
 
   const pages = [
     <div className="flex w-full gap-5">
-      <Category />
-      <SubCategoy />
+      <Category onSelectCategory={setSelectedCategory} selectedCategory={selectedCategory} />
+      <SubCategoy selectedCategory={selectedCategory} />
     </div>,
     <AddMedcine/>,
     <CosmeticPage/>
