@@ -6,6 +6,7 @@ import ThemeSlice from "../Featurs/Theme/theme";
 import pharmacySlice from "../Featurs/pharmacy/getAll";
 import editPharmacySlice from "../Featurs/pharmacy/editPhar";
 import pharmacyEmployeesSlice from "../Featurs/pharmacy/getPharEmps";
+import categorySlice from "../Featurs/category/categorySlice";
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 
 import {
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   pharmacySlice: pharmacySlice,
   editPharmacySlice: editPharmacySlice,
   pharmacyEmployeesSlice: pharmacyEmployeesSlice,
+  categorySlice: categorySlice,
 })
 
 export const store = configureStore({
