@@ -26,7 +26,7 @@ const AddProduct = () => {
 
   return (
     <div className="flex flex-col w-full gap-4">
-      {/* header */}
+
       <div id="header" className="flex items-center justify-center gap-5">
         <button
           onClick={() => handleClick("category")}

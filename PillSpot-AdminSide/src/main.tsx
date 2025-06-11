@@ -9,12 +9,14 @@ import Router from "./Router/index.tsx";
 // import { ConfigProvider, theme } from 'antd'
 import "./i18n.ts";
 import { PersistGate } from "redux-persist/integration/react";
+import { Toaster } from 'sonner';
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router />
+        <Toaster richColors position="top-right" />
       </PersistGate>
       {/* <ReactFormm/> */}
     </Provider>
