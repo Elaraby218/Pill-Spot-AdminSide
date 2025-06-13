@@ -60,7 +60,7 @@ export const addProduct = createAsyncThunk(
       formData.append('manufacturer', productData.manufacturer);
       formData.append('sideEffects', productData.sideEffects);
       formData.append('usageInstructions', productData.usageInstructions);
-      formData.append('requiresPrescription', String(productData.requiresPrescription));
+      formData.append('isPrescriptionRequired', String(productData.requiresPrescription));
       
       // Append image if it exists
       if (productData.image && productData.image[0]) {

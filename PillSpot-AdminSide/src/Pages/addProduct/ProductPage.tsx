@@ -1,10 +1,28 @@
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import ProductForm from "./ProductFrom/ProductForm";
 import ProductList from "./ProductList";
-import { RootState } from '../../App/Store';
+import axiosInstance from '../../axiosInstance';
 
 function AddMedcine() {
-  const { products, loading, error } = useSelector((state: RootState) => state.product);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await axiosInstance.get('/api/medicines?PageSize=100000');
+        setProducts(response.data);
+      } catch (error) {
+        setError(error instanceof Error ? error.message : 'Failed to fetch products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="flex w-full">
