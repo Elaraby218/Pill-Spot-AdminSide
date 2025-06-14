@@ -16,6 +16,7 @@ import AddProduct from "../Pages/addProduct";
 import UsersManagementPage from "../Pages/Users Management Page";
 import FeedbackPage from "../Pages/AdminHomePage/FeedBackPage";
 import ComplaintDetailsPage from "../Pages/AdminHomePage/ComplaintDetailsPage/ComplaintDetailsPage";
+import PharmaciesRequests from "../Pages/phamaciesRequests";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       <Route path="feedback" index element={<FeedbackPage/>} />
       <Route path="feedback/:complaintId" element={<ComplaintDetailsPage/>} />
       <Route path="addproduct" index element={<AddProduct/>} />
+      <Route path="pharmacyies-requests" index element={<PharmaciesRequests/>} />
       <Route path="users" index element={<UsersManagementPage/>} />
     </Route>
     

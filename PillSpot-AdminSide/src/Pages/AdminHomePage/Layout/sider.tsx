@@ -40,7 +40,7 @@ const Sider = () => {
       <NavLink to={"feedback"}>
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
-      <NavLink to={"#"}>
+      <NavLink to={"pharmacyies-requests"}>
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
       <NavLink to={"addproduct"}>
