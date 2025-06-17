@@ -15,7 +15,7 @@ function AddMedcine() {
 
   const fetchProducts = async () => {
     try {
-      const productsRes = await axiosInstance.get('/api/Products');
+      const productsRes = await axiosInstance.get('/api/medicines');
       setProducts(productsRes.data);
     } catch (err) {
       setError('Failed to fetch data');
@@ -32,6 +32,7 @@ function AddMedcine() {
   const handleEdit = (id: string) => {
     const product = products.find(p => p.id === id);
     if (product) {
+      console.log(product)
       setEditingProduct(product);
     }
   };

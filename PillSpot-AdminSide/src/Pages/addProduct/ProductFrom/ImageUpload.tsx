@@ -1,7 +1,6 @@
 import { UseFormRegister } from 'react-hook-form';
 import { Upload } from 'lucide-react';
-import { Product, ProductFormData } from './types';
-
+import { ProductFormData } from './types';
 
 interface FormProps {
   register: UseFormRegister<ProductFormData>;
@@ -11,10 +10,9 @@ interface FormProps {
 interface ImageUploadProps extends FormProps {
   preview: string | null;
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  editingProduct: Product | null;
 }
 
-const ImageUpload = ({ register, preview, handleImageChange, errors, editingProduct }: ImageUploadProps) => (
+const ImageUpload = ({ register, preview, handleImageChange, errors }: ImageUploadProps) => (
   <div className="w-full">
     <div className="relative border w-sm border-gray-600 rounded-lg overflow-hidden transition-all duration-300 hover:border-gray-400 focus-within:border-white">
       <input
@@ -22,7 +20,7 @@ const ImageUpload = ({ register, preview, handleImageChange, errors, editingProd
         id="image"
         className="absolute inset-0 opacity-0 cursor-pointer z-10"
         {...register('image', {
-          required: !editingProduct && 'Product image is required'
+          required: 'Product image is required'
         })}
         onChange={handleImageChange}
       />

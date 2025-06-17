@@ -40,7 +40,6 @@ export interface ProductFormData {
 
 export interface ProductFormProps {
   onSubmit: (data: ProductFormData) => void;
-  editingProduct: Product | null;
   onCancel?: () => void;
   refreshProducts?: () => void;
 } 

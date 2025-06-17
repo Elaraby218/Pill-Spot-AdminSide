@@ -1,4 +1,5 @@
-import axios from "axios";
+
+import axiosInstance from "../../axiosInstance";
 
 export interface IcurAdmin {
     userName : string ;
@@ -22,6 +23,6 @@ export interface IloginData {
 const apiUrl = import.meta.env.VITE_LOGIN_URL;
 
 export const login = async (userData: IloginData) => {
-    const response = await axios.post(apiUrl, userData, {withCredentials:true} );
+    const response = await axiosInstance.post(apiUrl, userData );
     if (response.data) return userData.userName;
 };

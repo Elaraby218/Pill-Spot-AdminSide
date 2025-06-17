@@ -12,7 +12,7 @@ import SubCategorySelection from './SubCategorySelection';
 import ProductDetails from './ProductDetails';
 import { toast } from 'sonner';
 
-const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormProps) => {
+const ProductForm = ({ refreshProducts }: ProductFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [preview, setPreview] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -92,25 +92,6 @@ const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormP
     setShowSubCategoryDropdown(false);
   };
 
-  useEffect(() => {
-    if (editingProduct) {
-      setValue('name', editingProduct.name);
-      setValue('category', editingProduct.category);
-      setValue('subCategory', editingProduct.subCategory);
-      setValue('description', editingProduct.description);
-      setValue('dosage', editingProduct.dosage);
-      setValue('price', editingProduct.price);
-      setValue('manufacturer', editingProduct.manufacturer);
-      setValue('sideEffects', editingProduct.sideEffects || '');
-      setValue('usageInstructions', editingProduct.usageInstructions);
-      setValue('requiresPrescription', editingProduct.requiresPrescription);
-      setPreview(editingProduct.image);
-    } else {
-      reset();
-      setPreview(null);
-    }
-  }, [editingProduct, setValue, reset]);
-
   const handleFormSubmit: SubmitHandler<ProductFormData> = async (data) => {
     const transformedData: ProductFormData = {
       ...data,
@@ -119,22 +100,18 @@ const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormP
       image: data.image,
     };
 
-    if (editingProduct) {
-      onSubmit(transformedData);
-    } else {
-      try {
-        await dispatch(addProduct(transformedData)).unwrap();
-        toast.success('Product added successfully!');
-        reset();
-        setPreview(null);
-        // Refresh the product list without page reload
-        if (refreshProducts) {
-          refreshProducts();
-        }
-      } catch (error) {
-        console.error('Error adding product:', error);
-        toast.error('Failed to add product');
+    try {
+      await dispatch(addProduct(transformedData)).unwrap();
+      toast.success('Product added successfully!');
+      reset();
+      setPreview(null);
+      // Refresh the product list without page reload
+      if (refreshProducts) {
+        refreshProducts();
       }
+    } catch (error) {
+      console.error('Error adding product:', error);
+      toast.error('Failed to add product');
     }
   };
 
@@ -161,7 +138,6 @@ const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormP
             preview={preview}
             handleImageChange={handleImageChange}
             errors={errors as FieldErrors<ProductFormData>}
-            editingProduct={editingProduct}
           />
         </div>
 
@@ -212,7 +188,7 @@ const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormP
           type="submit"
           className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
         >
-          {editingProduct ? 'save changes' : 'add'}
+          add
         </button>
       </div>
     </form>
