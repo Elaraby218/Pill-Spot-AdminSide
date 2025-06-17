@@ -1,37 +1,98 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductForm from "./ProductFrom/ProductForm";
 import ProductList from "./ProductList";
+import { Product, ProductFormData } from "./ProductFrom/types";
 import axiosInstance from '../../axiosInstance';
+import { toast } from 'sonner';
 
 function AddMedcine() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  console.log(editingProduct);
+
+  const fetchProducts = async () => {
+    try {
+      const productsRes = await axiosInstance.get('/api/Products');
+      setProducts(productsRes.data);
+    } catch (err) {
+      setError('Failed to fetch data');
+      console.error('Error fetching data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const response = await axiosInstance.get('/api/medicines?PageSize=100000');
-        setProducts(response.data);
-      } catch (error) {
-        setError(error instanceof Error ? error.message : 'Failed to fetch products');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
+
+  const handleEdit = (id: string) => {
+    const product = products.find(p => p.id === id);
+    if (product) {
+      setEditingProduct(product);
+    }
+  };
+
+  const handleDelete = (id: string) => {
+    // Implement delete functionality if needed
+    console.log('Delete product:', id);
+  };
+
+  const handleCardClick = (product: Product) => {
+    console.log('Card clicked, finding complete product data from list');
+    const completeProduct = products.find(p => p.id === product.id);
+    if (completeProduct) {
+      console.log('Complete product data found:', completeProduct);
+      setEditingProduct(completeProduct);
+    } else {
+      console.log('Product not found in list');
+    }
+  };
+
+  const handleFormSubmit = async (formData: ProductFormData) => {
+    if (editingProduct) {
+      // Handle edit submission
+      console.log('Edit product:', editingProduct.id, formData);
+      try {
+        // Here you would call your edit API
+        toast.success('Product updated successfully!');
+        setEditingProduct(null); // Clear editing state after submission
+        await fetchProducts(); // Refresh the list
+      } catch (error) {
+        console.error('Error updating product:', error);
+        toast.error('Failed to update product');
+      }
+    } else {
+      // Handle add submission
+      console.log('Add product:', formData);
+      try {
+        // Here you would call your add API
+        toast.success('Product added successfully!');
+        await fetchProducts(); // Refresh the list
+      } catch (error) {
+        console.error('Error adding product:', error);
+        toast.error('Failed to add product');
+      }
+    }
+  };
 
   return (
     <div className="flex w-full">
       <div className="mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 flex-1">
         <div className="rounded-3xl p-4 md:p-6 bg-base-100">
-          <h2 className="text-xl mb-6">Add New Product</h2>
-          <ProductForm onSubmit={() => {}} editingProduct={null} />
+          <h2 className="text-xl mb-6">
+            {editingProduct ? 'Edit Product' : 'Add New Product'}
+          </h2>
+          <ProductForm
+            onSubmit={handleFormSubmit}
+            editingProduct={editingProduct}
+            refreshProducts={fetchProducts}
+          />
         </div>
-        
+
         <div className="bg-base-100 rounded-3xl p-4 md:p-6">
           <h2 className="text-xl mb-6">Product List</h2>
           {loading ? (
@@ -39,10 +100,11 @@ function AddMedcine() {
           ) : error ? (
             <div className="text-red-500">{error}</div>
           ) : (
-            <ProductList 
-              products={products} 
-              onDelete={() => {}} 
-              onEdit={() => {}} 
+            <ProductList
+              products={products}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onCardClick={handleCardClick}
             />
           )}
         </div>

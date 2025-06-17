@@ -10,8 +10,9 @@ import ImageUpload from './ImageUpload';
 import CategorySelection from './CategorySelection';
 import SubCategorySelection from './SubCategorySelection';
 import ProductDetails from './ProductDetails';
+import { toast } from 'sonner';
 
-const ProductForm = ({ onSubmit, editingProduct }: ProductFormProps) => {
+const ProductForm = ({ onSubmit, editingProduct, refreshProducts }: ProductFormProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [preview, setPreview] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -110,7 +111,7 @@ const ProductForm = ({ onSubmit, editingProduct }: ProductFormProps) => {
     }
   }, [editingProduct, setValue, reset]);
 
-  const handleFormSubmit: SubmitHandler<ProductFormData> = (data) => {
+  const handleFormSubmit: SubmitHandler<ProductFormData> = async (data) => {
     const transformedData: ProductFormData = {
       ...data,
       price: parseFloat(data.price).toFixed(2),
@@ -121,9 +122,19 @@ const ProductForm = ({ onSubmit, editingProduct }: ProductFormProps) => {
     if (editingProduct) {
       onSubmit(transformedData);
     } else {
-      dispatch(addProduct(transformedData));
-      reset();
-      setPreview(null);
+      try {
+        await dispatch(addProduct(transformedData)).unwrap();
+        toast.success('Product added successfully!');
+        reset();
+        setPreview(null);
+        // Refresh the product list without page reload
+        if (refreshProducts) {
+          refreshProducts();
+        }
+      } catch (error) {
+        console.error('Error adding product:', error);
+        toast.error('Failed to add product');
+      }
     }
   };
 
