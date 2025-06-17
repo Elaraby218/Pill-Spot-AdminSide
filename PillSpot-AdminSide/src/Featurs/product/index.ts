@@ -1,2 +1,2 @@
 export { default as productReducer } from './productSlice';
-export { addProduct, resetProductState } from './productSlice'; 
+export { addProduct, fetchProducts, resetProductState } from './productSlice'; 

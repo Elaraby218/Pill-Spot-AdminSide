@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductForm from "./ProductFrom/ProductForm";
-import ProductList from "./ProductList";
-import { Product, ProductFormData } from "./ProductFrom/types";
+import ProductList, { Product } from "./ProductList";
+import { ProductFormData } from "./ProductFrom/types";
 import axiosInstance from '../../axiosInstance';
 import { toast } from 'sonner';
 
@@ -30,7 +30,7 @@ function AddMedcine() {
   }, []);
 
   const handleEdit = (id: string) => {
-    const product = products.find(p => p.id === id);
+    const product = products.find(p => p.productId === id);
     if (product) {
       console.log(product)
       setEditingProduct(product);
@@ -42,21 +42,10 @@ function AddMedcine() {
     console.log('Delete product:', id);
   };
 
-  const handleCardClick = (product: Product) => {
-    console.log('Card clicked, finding complete product data from list');
-    const completeProduct = products.find(p => p.id === product.id);
-    if (completeProduct) {
-      console.log('Complete product data found:', completeProduct);
-      setEditingProduct(completeProduct);
-    } else {
-      console.log('Product not found in list');
-    }
-  };
-
   const handleFormSubmit = async (formData: ProductFormData) => {
     if (editingProduct) {
       // Handle edit submission
-      console.log('Edit product:', editingProduct.id, formData);
+      console.log('Edit product:', editingProduct.productId, formData);
       try {
         // Here you would call your edit API
         toast.success('Product updated successfully!');
@@ -89,7 +78,6 @@ function AddMedcine() {
           </h2>
           <ProductForm
             onSubmit={handleFormSubmit}
-            editingProduct={editingProduct}
             refreshProducts={fetchProducts}
           />
         </div>
@@ -105,7 +93,7 @@ function AddMedcine() {
               products={products}
               onDelete={handleDelete}
               onEdit={handleEdit}
-              onCardClick={handleCardClick}
+              refreshProducts={fetchProducts}
             />
           )}
         </div>

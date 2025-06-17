@@ -3,18 +3,26 @@ import { Search } from 'lucide-react';
 import ProductCard from '../product/productCard';
 
 export interface Product {
-    id: string;
+  productId: string;
+  name: string;
+  manufacturer: string;
+  dosage: number;
+  sideEffects: string;
+  isPrescriptionRequired: boolean;
+  subCategoryDto: {
+    categoryDto: {
+      categoryId: string;
+      name: string;
+    };
+    subCategoryId: string;
     name: string;
-    category: string;
-    description: string;
-    dosage: number;
-    price: number;
-    manufacturer: string;
-    sideEffects: string;
-    requiresPrescription: boolean;
-    image: string | null;
-    imageURL: string | null;
-  }
+  };
+  description: string;
+  usageInstructions: string;
+  price: number;
+  imageURL: string;
+  createdDate: string;
+}
 
 export interface ProductFormData {
     name: string;
@@ -33,9 +41,10 @@ interface ProductListProps {
   products: Product[];
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
+  refreshProducts: () => void;
 }
 
-const ProductList = ({ products, onDelete, onEdit }: ProductListProps) => {
+const ProductList = ({ products, onDelete, onEdit, refreshProducts }: ProductListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Memoize filtered products to prevent unnecessary recalculations
@@ -48,11 +57,13 @@ const ProductList = ({ products, onDelete, onEdit }: ProductListProps) => {
       const manufacturer = String(product.manufacturer || '').toLowerCase();
       const dosage = String(product.dosage || '').toLowerCase();
       const price = String(product.price || '').toLowerCase();
+      const category = String(product.subCategoryDto?.categoryDto?.name || '').toLowerCase();
 
       return name.includes(searchLower) ||
              manufacturer.includes(searchLower) ||
              dosage.includes(searchLower) ||
-             price.includes(searchLower);
+             price.includes(searchLower) ||
+             category.includes(searchLower);
     });
   }, [products, searchTerm]);
 
@@ -73,10 +84,11 @@ const ProductList = ({ products, onDelete, onEdit }: ProductListProps) => {
         {filteredProducts.length > 0 ? (
           filteredProducts.map(product => (
             <ProductCard
-              key={product.id}
+              key={product.productId}
               product={product}
               onDelete={onDelete}
               onEdit={onEdit}
+              refreshProducts={refreshProducts}
             />
           ))
         ) : (

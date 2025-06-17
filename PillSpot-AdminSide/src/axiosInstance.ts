@@ -1,16 +1,16 @@
 import axios from 'axios';
 
 
-const fetchCsrfToken = async (): Promise<string> => {
-    try {
-        const response = await axios.get(import.meta.env.VITE_CSRF);
-        console.log(response.data.csrfToken)
-        return response.data.csrfToken || response.data; 
-    } catch (error) {
-        console.error('Failed to fetch CSRF token:', error);
-        throw error;
-    }
-};
+// const fetchCsrfToken = async (): Promise<string> => {
+//     try {
+//         const response = await axios.get(import.meta.env.VITE_CSRF);
+//         console.log(response.data.csrfToken)
+//         return response.data.csrfToken || response.data; 
+//     } catch (error) {
+//         console.error('Failed to fetch CSRF token:', error);
+//         throw error;
+//     }
+// };
 
 
 const axiosInstance = axios.create({
