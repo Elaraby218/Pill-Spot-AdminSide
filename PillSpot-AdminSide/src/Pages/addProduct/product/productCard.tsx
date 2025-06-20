@@ -65,11 +65,10 @@ const ProductCard = ({ product, onDelete, onEdit, refreshProducts }: ProductCard
     <>
       <div className="group relative bg-[#2C3745] dark:bg-gray-300 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-600/50 hover:border-gray-400">
         <div className="flex items-center gap-6">
-          {/* Image Column */}
           <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 shadow-md">
             {product.imageURL ? (
               <img
-                src={"https://localhost:7298"+product.imageURL}
+                src={"https://localhost:7298/"+product.imageURL}
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />

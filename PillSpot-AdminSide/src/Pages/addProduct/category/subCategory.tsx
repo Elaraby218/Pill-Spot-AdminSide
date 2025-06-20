@@ -11,15 +11,17 @@ interface ISubCategory {
 
 interface SubCategoryProps {
   selectedCategory: ICategory | null;
+  onSelectSubCategory: (subCategoryId: string) => void;
 }
 
-const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory }) => {
+const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory, onSelectSubCategory }) => {
   const [subCategoryName, setSubCategoryName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
   const [isFetching, setIsFetching] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string | null>(null);
 
   const fetchSubCategories = async (categoryId: string) => {
     setIsFetching(true);
@@ -34,6 +36,7 @@ const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory }) => {
     } finally {
       setIsFetching(false);
     }
+    setSelectedSubCategoryId(null); // Reset selection when category changes
   };
 
   useEffect(() => {
@@ -86,6 +89,11 @@ const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory }) => {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const handleSubCategoryClick = (subCategoryId: string) => {
+    setSelectedSubCategoryId(subCategoryId);
+    onSelectSubCategory(subCategoryId);
   };
 
   const filteredSubCategories = subCategories.filter(subCategory =>
@@ -168,7 +176,10 @@ const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory }) => {
           filteredSubCategories.map((subCategory) => (
             <div
               key={subCategory.subCategoryId}
-              className="flex items-center justify-between p-3 rounded-xl dark:bg-gray-300 bg-[#2C3745] max-h-14"
+              className={`flex items-center justify-between p-3 rounded-xl dark:bg-gray-300 bg-[#2C3745] max-h-14 cursor-pointer ${
+                selectedSubCategoryId === subCategory.subCategoryId ? 'ring-2 ring-blue-500' : ''
+              }`}
+              onClick={() => handleSubCategoryClick(subCategory.subCategoryId)}
             >
               <span className="dark:text-gray-800">{subCategory.name}</span>
               <div className="flex gap-3">
@@ -177,7 +188,10 @@ const SubCategory: React.FC<SubCategoryProps> = ({ selectedCategory }) => {
                 </button>
                 <button 
                   className="text-red-600 hover:underline disabled:opacity-50"
-                  onClick={() => handleDeleteSubCategory(subCategory.subCategoryId)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteSubCategory(subCategory.subCategoryId);
+                  }}
                   disabled={deletingId === subCategory.subCategoryId}
                 >
                   {deletingId === subCategory.subCategoryId ? 'Deleting...' : 'Delete'}

@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import axiosInstance from '../axiosInstance';
 
-interface CosmeticProduct {
-  id: string;
+export interface CosmeticProduct {
+  productId: string;
   brand: string;
   skinType: string;
   volume: number;
@@ -11,10 +12,20 @@ interface CosmeticProduct {
   description: string;
   price: number;
   usageInstructions: string;
-  image: string | null;
+  imageURL: string | null;
+  subCategoryDto: {
+    categoryDto: {
+      categoryId: string;
+      name: string;
+    };
+    subCategoryId: string;
+    name: string;
+  };
+  manufacturer: string;
+  createdDate: string;
 }
 
-interface CosmeticProductFormData {
+export interface CosmeticProductFormData {
   brand: string;
   skinType: string;
   volume: number;
@@ -28,114 +39,87 @@ interface CosmeticProductFormData {
 
 export const useCosmeticProducts = () => {
   const [products, setProducts] = useState<CosmeticProduct[]>([]);
-  const [editingProduct, setEditingProduct] = useState<CosmeticProduct | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const addProduct = (formData: CosmeticProductFormData) => {
-    const file = formData.image?.[0];
-    let imageUrl = null;
-    
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      
-      reader.onload = () => {
-        imageUrl = reader.result as string;
-        
-        if (editingProduct) {
-          const updatedProduct = {
-            ...editingProduct,
-            brand: formData.brand,
-            skinType: formData.skinType,
-            volume: formData.volume,
-            subCategoryId: formData.subCategoryId,
-            name: formData.name,
-            description: formData.description,
-            price: formData.price,
-            usageInstructions: formData.usageInstructions,
-            image: imageUrl
-          };
-          
-          setProducts(prevProducts => 
-            prevProducts.map(product => 
-              product.id === editingProduct.id ? updatedProduct : product
-            )
-          );
-        } else {
-          const newProduct: CosmeticProduct = {
-            id: uuidv4(),
-            brand: formData.brand,
-            skinType: formData.skinType,
-            volume: formData.volume,
-            subCategoryId: formData.subCategoryId,
-            name: formData.name,
-            description: formData.description,
-            price: formData.price,
-            usageInstructions: formData.usageInstructions,
-            image: imageUrl
-          };
-          
-          setProducts(prevProducts => [...prevProducts, newProduct]);
-        }
-        setEditingProduct(null);
-      };
-    } else {
-      if (editingProduct) {
-        const updatedProduct = {
-          ...editingProduct,
-          brand: formData.brand,
-          skinType: formData.skinType,
-          volume: formData.volume,
-          subCategoryId: formData.subCategoryId,
-          name: formData.name,
-          description: formData.description,
-          price: formData.price,
-          usageInstructions: formData.usageInstructions
-        };
-        
-        setProducts(prevProducts => 
-          prevProducts.map(product => 
-            product.id === editingProduct.id ? updatedProduct : product
-          )
-        );
-      } else {
-        const newProduct: CosmeticProduct = {
-          id: uuidv4(),
-          brand: formData.brand,
-          skinType: formData.skinType,
-          volume: formData.volume,
-          subCategoryId: formData.subCategoryId,
-          name: formData.name,
-          description: formData.description,
-          price: formData.price,
-          usageInstructions: formData.usageInstructions,
-          image: null
-        };
-        
-        setProducts(prevProducts => [...prevProducts, newProduct]);
-      }
-      setEditingProduct(null);
+  const fetchCosmeticProducts = async () => {
+    setLoading(true);
+    try {
+      // Assuming your API endpoint for cosmetics is /api/cosmetics
+      const response = await axiosInstance.get('/api/cosmetics');
+      setProducts(response.data);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch cosmetic products');
+      toast.error('Failed to fetch cosmetic products');
+      console.error('Error fetching cosmetic products:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const deleteProduct = (id: string) => {
-    setProducts(prevProducts => prevProducts.filter(product => product.id !== id));
-    if (editingProduct?.id === id) {
-      setEditingProduct(null);
+  useEffect(() => {
+    fetchCosmeticProducts();
+  }, []);
+
+  const addCosmeticProduct = async (formData: CosmeticProductFormData) => {
+    const data = new FormData();
+    data.append('Brand', formData.brand);
+    data.append('SkinType', formData.skinType);
+    data.append('Volume', formData.volume.toString());
+    data.append('SubCategoryId', formData.subCategoryId);
+    data.append('Name', formData.name);
+    data.append('Description', formData.description);
+    data.append('Price', formData.price.toString());
+    data.append('UsageInstructions', formData.usageInstructions);
+    data.append('Manufacturer', formData.brand);
+
+    if (formData.image && formData.image[0]) {
+      data.append('Image', formData.image[0]);
+    }
+
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post('/api/cosmetics', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      toast.success('Cosmetic product added successfully!');
+      // Assuming the response.data is the new product
+      setProducts(prevProducts => [...prevProducts, response.data]);
+    } catch (error) {
+      console.error('Error submitting cosmetic product:', error);
+      toast.error('Failed to add cosmetic product.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteProduct = async (id: string) => {
+    try {
+      await axiosInstance.delete(`/api/cosmetics/${id}`);
+      setProducts(products.filter((p) => p.productId !== id));
+      toast.success('Cosmetic deleted successfully!');
+    } catch {
+      toast.error('Failed to delete cosmetic.');
     }
   };
 
   const editProduct = (id: string) => {
-    const productToEdit = products.find(product => product.id === id);
-    if (productToEdit) {
-      setEditingProduct(productToEdit);
-    }
+    // For now, just log the ID.
+    // In the future, you can set an "editing" state here
+    // to open a modal with the product's data.
+    console.log('Editing cosmetic with ID:', id);
   };
 
   return {
     products,
-    addProduct,
+    loading,
+    error,
+    addCosmeticProduct,
+    fetchCosmeticProducts,
     deleteProduct,
     editProduct,
-    editingProduct
   };
 }; 

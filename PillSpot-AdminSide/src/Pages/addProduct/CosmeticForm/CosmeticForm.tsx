@@ -1,74 +1,75 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Upload } from 'lucide-react';
+import { CosmeticProductFormData } from '../../../hooks/useCosmeticProducts';
+import axiosInstance from '../../../axiosInstance';
+import { toast } from 'sonner';
 
-interface CosmeticProduct {
-  id: string;
-  brand: string;
-  skinType: string;
-  volume: number;
-  subCategoryId: string;
+interface ICategory {
+  categoryId: string;
   name: string;
-  description: string;
-  price: number;
-  usageInstructions: string;
-  image: string | null;
 }
 
-interface CosmeticProductFormData {
-  brand: string;
-  skinType: string;
-  volume: number;
+interface ISubCategory {
   subCategoryId: string;
-  name: string;
-  description: string;
-  price: number;
-  usageInstructions: string;
-  image: FileList;
+  name:string;
 }
 
 interface CosmeticFormProps {
   onSubmit: (data: CosmeticProductFormData) => void;
-  editingProduct: CosmeticProduct | null;
+  isLoading: boolean;
 }
 
-const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
+const CosmeticForm = ({ onSubmit, isLoading }: CosmeticFormProps) => {
   const [preview, setPreview] = useState<string | null>(null);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   
   const { 
     register, 
     handleSubmit, 
     reset,
     watch,
-    setValue,
     formState: { errors } 
   } = useForm<CosmeticProductFormData>();
 
-  const imageFile = watch('image');
+  const selectedCategoryId = watch('subCategoryId'); // This will be used to get subcategories
 
   useEffect(() => {
-    if (editingProduct) {
-      setValue('brand', editingProduct.brand);
-      setValue('skinType', editingProduct.skinType);
-      setValue('volume', editingProduct.volume);
-      setValue('subCategoryId', editingProduct.subCategoryId);
-      setValue('name', editingProduct.name);
-      setValue('description', editingProduct.description);
-      setValue('price', editingProduct.price);
-      setValue('usageInstructions', editingProduct.usageInstructions);
-      setPreview(editingProduct.image);
-    } else {
-      reset();
-      setPreview(null);
-    }
-  }, [editingProduct, setValue, reset]);
+    const fetchCategories = async () => {
+      try {
+        const response = await axiosInstance.get('/api/categories?PageNumber=1&PageSize=1000');
+        setCategories(response.data);
+      } catch (error) {
+        toast.error('Failed to fetch categories');
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      if (selectedCategory) {
+        try {
+          const response = await axiosInstance.get(`/api/categories/${selectedCategory}/subcategories?PageNumber=1&PageSize=1000`);
+          setSubCategories(response.data);
+        } catch (error) {
+          toast.error('Failed to fetch sub-categories');
+          setSubCategories([]);
+        }
+      } else {
+        setSubCategories([]);
+      }
+    };
+    fetchSubCategories();
+  }, [selectedCategory]);
 
   const handleFormSubmit: SubmitHandler<CosmeticProductFormData> = (data) => {
     onSubmit(data);
-    if (!editingProduct) {
-      reset();
-      setPreview(null);
-    }
+    reset();
+    setPreview(null);
+    setSelectedCategory('');
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,7 +94,7 @@ const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
             id="image"
             className="absolute inset-0 opacity-0 cursor-pointer z-10"
             {...register('image', { 
-              required: !editingProduct && 'Product image is required' 
+              required: 'Product image is required' 
             })}
             onChange={handleImageChange}
           />
@@ -139,14 +140,20 @@ const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
 
         <div>
           <label htmlFor="skinType" className="text-sm mb-1 block">Skin Type</label>
-          <input
+          <select
             id="skinType"
-            type="text"
             className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
             {...register('skinType', { 
               required: 'Skin type is required' 
             })}
-          />
+          >
+            <option value="">Select a skin type</option>
+            {["Normal", "Oily", "Dry", "Combination", "Sensitive"].map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
           {errors.skinType && (
             <span className="text-red-500 text-sm mt-1 block">{errors.skinType.message}</span>
           )}
@@ -169,19 +176,21 @@ const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
             <span className="text-red-500 text-sm mt-1 block">{errors.volume.message}</span>
           )}
         </div>
-
+        
         <div>
-          <label htmlFor="subCategoryId" className="text-sm mb-1 block">Sub Category ID</label>
+          <label htmlFor="price" className="text-sm mb-1 block">Price</label>
           <input
-            id="subCategoryId"
-            type="text"
+            id="price"
+            type="number"
+            step="0.01"
             className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
-            {...register('subCategoryId', { 
-              required: 'Sub category ID is required' 
+            {...register('price', { 
+              required: 'Price is required',
+              min: { value: 0, message: 'Price must be greater than or equal to 0' }
             })}
           />
-          {errors.subCategoryId && (
-            <span className="text-red-500 text-sm mt-1 block">{errors.subCategoryId.message}</span>
+          {errors.price && (
+            <span className="text-red-500 text-sm mt-1 block">{errors.price.message}</span>
           )}
         </div>
       </div>
@@ -218,23 +227,6 @@ const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
       </div>
 
       <div>
-        <label htmlFor="price" className="text-sm mb-1 block">Price</label>
-        <input
-          id="price"
-          type="number"
-          step="0.01"
-          className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
-          {...register('price', { 
-            required: 'Price is required',
-            min: { value: 0, message: 'Price must be greater than or equal to 0' }
-          })}
-        />
-        {errors.price && (
-          <span className="text-red-500 text-sm mt-1 block">{errors.price.message}</span>
-        )}
-      </div>
-
-      <div>
         <label htmlFor="usageInstructions" className="text-sm mb-1 block">Usage Instructions</label>
         <textarea
           id="usageInstructions"
@@ -249,12 +241,54 @@ const CosmeticForm = ({ onSubmit, editingProduct }: CosmeticFormProps) => {
         )}
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label htmlFor="category" className="text-sm mb-1 block">Category</label>
+          <select
+            id="category"
+            className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            value={selectedCategory}
+          >
+            <option value="">Select a category</option>
+            {categories.map((cat) => (
+              <option key={cat.categoryId} value={cat.categoryId}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="subCategoryId" className="text-sm mb-1 block">Sub Category</label>
+          <select
+            id="subCategoryId"
+            className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
+            {...register('subCategoryId', { 
+              required: 'Sub category is required' 
+            })}
+            disabled={!selectedCategory || subCategories.length === 0}
+          >
+            <option value="">Select a sub-category</option>
+            {subCategories.map((subCat) => (
+              <option key={subCat.subCategoryId} value={subCat.subCategoryId}>
+                {subCat.name}
+              </option>
+            ))}
+          </select>
+          {errors.subCategoryId && (
+            <span className="text-red-500 text-sm mt-1 block">{errors.subCategoryId.message}</span>
+          )}
+        </div>
+      </div>
+
       <div className="flex justify-end mt-6">
         <button
           type="submit"
-          className="w-full p-2 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-[#2C3745] dark:bg-gray-300"
+          className="w-full p-3 border border-gray-600 rounded-lg focus:outline-none focus:border-white transition-colors bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500"
+          disabled={isLoading}
         >
-          {editingProduct ? 'Save Changes' : 'Add Product'}
+          {isLoading ? 'Uploading...' : 'Add Cosmetic Product'}
         </button>
       </div>
     </form>
