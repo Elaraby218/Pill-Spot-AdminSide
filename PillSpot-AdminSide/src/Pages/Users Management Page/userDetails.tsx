@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import axiosInstance from '../../axiosInstance';
 
 interface User {
-  id: string;
-  userName: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  roles?: string[];
-  // Add more fields as needed
+  userName: string;
+  phoneNumber: string;
+  profilePictureUrl: string | null;
+  dateOfBirth: string;
+  gender: 'Male' | 'Female';
 }
 
 interface UserDetailsProps {
@@ -19,10 +23,11 @@ const API_BASE = 'https://localhost:7298';
 const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) => {
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState(user.roles?.[0] || '');
+  const [role, setRole] = useState(''); // role not in API response, keep for future
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [gender, setGender] = useState<'Male' | 'Female'>(user.gender);
 
   // Update email
   const handleUpdateEmail = async () => {
@@ -30,16 +35,11 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
     setError('');
     setMessage('');
     try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}/update-email`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) throw new Error('Failed to update email');
+      await axiosInstance.put(`/api/users/${user.userName}/update-email`, { email });
       setMessage('Email updated');
       onUserUpdated({ ...user, email });
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error updating email');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Error updating email');
     } finally {
       setLoading(false);
     }
@@ -51,37 +51,11 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
     setError('');
     setMessage('');
     try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}/update-password`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      });
-      if (!res.ok) throw new Error('Failed to update password');
+      await axiosInstance.put(`/api/users/${user.userName}/update-password`, { password });
       setMessage('Password updated');
       setPassword('');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error updating password');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Update role
-  const handleUpdateRole = async () => {
-    setLoading(true);
-    setError('');
-    setMessage('');
-    try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}/role`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role }),
-      });
-      if (!res.ok) throw new Error('Failed to update role');
-      setMessage('Role updated');
-      onUserUpdated({ ...user, roles: [role] });
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error updating role');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Error updating password');
     } finally {
       setLoading(false);
     }
@@ -93,11 +67,10 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
     setError('');
     setMessage('');
     try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}/lockout`, { method: 'POST' });
-      if (!res.ok) throw new Error('Failed to lockout user');
+      await axiosInstance.post(`/api/users/${user.userName}/lockout`);
       setMessage('User locked out');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error locking out user');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Error locking out user');
     } finally {
       setLoading(false);
     }
@@ -109,11 +82,10 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
     setError('');
     setMessage('');
     try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}/unlock`, { method: 'POST' });
-      if (!res.ok) throw new Error('Failed to unlock user');
+      await axiosInstance.post(`/api/users/${user.userName}/unlock`);
       setMessage('User unlocked');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error unlocking user');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Error unlocking user');
     } finally {
       setLoading(false);
     }
@@ -126,12 +98,11 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
     setError('');
     setMessage('');
     try {
-      const res = await fetch(`${API_BASE}/api/users/${user.userName}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Failed to delete user');
+      await axiosInstance.delete(`/api/users/${user.userName}`);
       setMessage('User deleted');
       onUserDeleted();
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error deleting user');
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Error deleting user');
     } finally {
       setLoading(false);
     }
@@ -155,9 +126,23 @@ const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) =
         <button onClick={handleUpdatePassword} className="btn btn-sm btn-primary mt-1" disabled={loading || !password}>Update Password</button>
       </div>
       <div>
-        <label className="block font-semibold">Role</label>
-        <input value={role} onChange={e => setRole(e.target.value)} className="input input-bordered w-full" />
-        <button onClick={handleUpdateRole} className="btn btn-sm btn-primary mt-1" disabled={loading}>Update Role</button>
+        <label className="block font-semibold">Full Name</label>
+        <input value={`${user.firstName} ${user.lastName}`} disabled className="input input-bordered w-full" />
+      </div>
+      <div>
+        <label className="block font-semibold">Phone Number</label>
+        <input value={user.phoneNumber} disabled className="input input-bordered w-full" />
+      </div>
+      <div>
+        <label className="block font-semibold">Date of Birth</label>
+        <input value={user.dateOfBirth} disabled className="input input-bordered w-full" />
+      </div>
+      <div>
+        <label className="block font-semibold">Gender</label>
+        <select value={gender} onChange={e => setGender(e.target.value as 'Male' | 'Female')} className="input input-bordered w-full" disabled>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
       </div>
       <div className="flex gap-2 mt-4">
         <button onClick={handleLockout} className="btn btn-warning" disabled={loading}>Lockout</button>

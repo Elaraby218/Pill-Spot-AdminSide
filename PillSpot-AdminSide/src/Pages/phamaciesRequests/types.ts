@@ -1,22 +1,32 @@
-export interface Location {
-  longitude: number;
-  latitude: number;
-  additionalInfo: string;
-  cityName: string;
+export interface GovernmentReferenceDto {
   governmentName: string;
 }
 
+export interface CityDto {
+  cityName: string;
+  governmentReferenceDto: GovernmentReferenceDto;
+}
+
+export interface LocationDto {
+  longitude: number;
+  latitude: number;
+  additionalInfo: string;
+  cityDto: CityDto;
+}
+
 export interface PharmacyRequest {
-  id: number;
+  requestId: string;
   name: string;
-  pharmacistLicense: string;
-  location: Location;
+  logoURL: string;
+  locationDto: LocationDto;
   licenseId: string;
   contactNumber: string;
   openingTime: string;
   closingTime: string;
   isOpen24: boolean;
   daysOpen: string;
-  logoUrl: string;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: 'Pending' | 'Accepted' | 'Rejected';
+  adminMessage: string | null;
+  requestDate: string;
+  decisionDate: string | null;
 } 

@@ -20,13 +20,17 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
-    try {
-        const csrfToken = await fetchCsrfToken();
-        config.headers['X-CSRF-Token'] = csrfToken;
-        console.log('CSRF token added to request:', csrfToken);
-    } catch (error) {
-        console.error('Error adding CSRF token:', error);
-    }
+   // const methodsThatNeedCsrf = ['post', 'put', 'patch', 'delete'];
+
+  //  if (methodsThatNeedCsrf.includes(config.method?.toLowerCase() || '')) {
+        try {
+            const csrfToken = await fetchCsrfToken();
+            config.headers['X-CSRF-Token'] = csrfToken;
+            console.log('CSRF token added to request:', csrfToken);
+        } catch (error) {
+            console.error('Error adding CSRF token:', error);
+        }
+    //}
     return config;
 }, (error) => {
     return Promise.reject(error);

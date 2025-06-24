@@ -6,8 +6,8 @@ import { StatusBadge } from './StatusBadge';
 interface PharmacyTableProps {
   requests: PharmacyRequest[];
   onViewDetails: (request: PharmacyRequest) => void;
-  onAccept: (id: number) => void;
-  onReject: (id: number) => void;
+  onAccept: (requestId: string) => void;
+  onReject: (requestId: string) => void;
 }
 
 export const PharmacyTable: React.FC<PharmacyTableProps> = ({
@@ -31,12 +31,12 @@ export const PharmacyTable: React.FC<PharmacyTableProps> = ({
         </thead>
         <tbody>
           {requests.map((request) => (
-            <tr key={request.id} className="hover:bg-base-200">
+            <tr key={request.requestId} className="hover:bg-base-200">
               <td>
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
-                      <img src={"https://localhost:7298"+request.logoUrl} alt={request.name} />
+                      <img src={"https://localhost:7298" + request.logoURL} alt={request.name} />
                     </div>
                   </div>
                   <div>
@@ -48,7 +48,7 @@ export const PharmacyTable: React.FC<PharmacyTableProps> = ({
               <td>
                 <div className="flex items-center gap-2 text-base-content">
                   <FaMapMarkerAlt className="text-primary" />
-                  {`${request.location.cityName}, ${request.location.governmentName}`}
+                  {`${request.locationDto.cityDto.cityName}, ${request.locationDto.cityDto.governmentReferenceDto.governmentName}`}
                 </div>
               </td>
               <td>
@@ -72,17 +72,17 @@ export const PharmacyTable: React.FC<PharmacyTableProps> = ({
                   >
                     <FaEye className="mr-1" /> View
                   </button>
-                  {request.status === 'pending' && (
+                  {request.status === 'Pending' && (
                     <>
                       <button 
                         className="btn btn-sm btn-success"
-                        onClick={() => onAccept(request.id)}
+                        onClick={() => onAccept(request.requestId)}
                       >
                         <FaCheck className="mr-1" /> Accept
                       </button>
                       <button 
                         className="btn btn-sm btn-error"
-                        onClick={() => onReject(request.id)}
+                        onClick={() => onReject(request.requestId)}
                       >
                         <FaTimes className="mr-1" /> Reject
                       </button>

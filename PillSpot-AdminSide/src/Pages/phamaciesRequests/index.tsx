@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PharmacyRequest } from './types';
 import { StatsHeader } from './components/StatsHeader';
@@ -22,18 +22,18 @@ const PharmaciesRequests = () => {
     setOpenDialog(true);
   };
 
-  const handleAccept = async (id: number) => {
+  const handleAccept = async (requestId: string) => {
     try {
-      await dispatch(acceptPharmacyRequest(id)).unwrap();
+      await dispatch(acceptPharmacyRequest(requestId)).unwrap();
       setOpenDialog(false);
     } catch (error) {
       console.error('Error accepting request:', error);
     }
   };
 
-  const handleReject = async (id: number) => {
+  const handleReject = async (requestId: string) => {
     try {
-      await dispatch(rejectPharmacyRequest(id)).unwrap();
+      await dispatch(rejectPharmacyRequest(requestId)).unwrap();
       setOpenDialog(false);
     } catch (error) {
       console.error('Error rejecting request:', error);
@@ -45,7 +45,7 @@ const PharmaciesRequests = () => {
   }
 
   if (error) {
-    return <div className="flex justify-center items-center h-screen text-error">{error}</div>;
+    return <div className="flex justify-center items-center text-error">{error}</div>;
   }
 
   return (

@@ -1,38 +1,22 @@
 import { useState } from 'react';
-
-interface User {
-  id: string;
-  userName: string;
-  email: string;
-  // Add more fields as needed
-}
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserByUsername, User } from '../../Featurs/User/usersSlice';
+import { RootState, AppDispatch } from '../../App/Store';
 
 interface SearchProps {
   onUserSelect: (user: User) => void;
 }
 
 const Search = ({ onUserSelect }: SearchProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading, error } = useSelector((state: RootState) => state.users);
   const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    try {
-      const res = await fetch(`/api/users/${username}`);
-      if (!res.ok) throw new Error('User not found');
-      const user: User = await res.json();
-      onUserSelect(user);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || 'Error searching user');
-      } else {
-        setError('Error searching user');
-      }
-    } finally {
-      setLoading(false);
+    const resultAction = await dispatch(fetchUserByUsername(username));
+    if (fetchUserByUsername.fulfilled.match(resultAction)) {
+      onUserSelect(resultAction.payload);
     }
   };
 
@@ -47,7 +31,7 @@ const Search = ({ onUserSelect }: SearchProps) => {
         required
       />
       <button type="submit" className="btn btn-primary light:bg-red-400" disabled={loading}>
-        {loading ? 'Searching...' : 'Search'}
+        {loading ? 'Searching...' : 'Seaxzcfrch'}
       </button>
       {error && <span className="text-red-500 ml-2">{error}</span>}
     </form>

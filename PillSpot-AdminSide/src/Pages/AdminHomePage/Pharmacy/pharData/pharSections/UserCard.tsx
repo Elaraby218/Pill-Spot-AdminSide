@@ -12,7 +12,7 @@ interface UserCardProps {
 }
 
 const UserCard = ({ employee, onDelete, onEdit }: UserCardProps) => {
-  const base = "https://localhost:7298/" ;
+  const base = "https://localhost:7298" ;
   const setStyle =
     "bg-base-100 w-10 h-10 flex items-center justify-center rounded-full hover:scale-110 duration-200 cursor-pointer";
   

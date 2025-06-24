@@ -6,8 +6,8 @@ interface PharmacyDetailsModalProps {
   request: PharmacyRequest | null;
   isOpen: boolean;
   onClose: () => void;
-  onAccept: (id: number) => void;
-  onReject: (id: number) => void;
+  onAccept: (requestId: string) => void;
+  onReject: (requestId: string) => void;
 }
 
 export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
@@ -26,7 +26,7 @@ export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
           <div className="flex items-center gap-4">
             <div className="avatar">
               <div className="w-24 h-24 rounded-lg">
-                <img src={request.logo} alt={request.name} />
+                <img src={request.logoURL} alt={request.name} />
               </div>
             </div>
             <div>
@@ -34,17 +34,17 @@ export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
               <p className="text-sm opacity-70 text-base-content">License ID: {request.licenseId}</p>
             </div>
           </div>
-          {request.status === 'pending' && (
+          {request.status === 'Pending' && (
             <div className="flex gap-2">
               <button 
                 className="btn btn-success"
-                onClick={() => onAccept(request.id)}
+                onClick={() => onAccept(request.requestId)}
               >
                 <FaCheck className="mr-2" /> Accept Request
               </button>
               <button 
                 className="btn btn-error"
-                onClick={() => onReject(request.id)}
+                onClick={() => onReject(request.requestId)}
               >
                 <FaTimes className="mr-2" /> Reject Request
               </button>
@@ -60,13 +60,8 @@ export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
               </h4>
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-base-content">Pharmacist License:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-base-content">{request.pharmacistLicense}</span>
-                    <button className="btn btn-sm btn-outline">
-                      <FaDownload className="mr-1" /> Download
-                    </button>
-                  </div>
+                  <span className="text-base-content">License ID:</span>
+                  <span className="text-base-content">{request.licenseId}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-base-content">Contact Number:</span>
@@ -84,20 +79,20 @@ export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span className="text-base-content">City:</span>
-                  <span className="text-base-content">{request.location.cityName}</span>
+                  <span className="text-base-content">{request.locationDto.cityDto.cityName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-base-content">Government:</span>
-                  <span className="text-base-content">{request.location.governmentName}</span>
+                  <span className="text-base-content">{request.locationDto.cityDto.governmentReferenceDto.governmentName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-base-content">Additional Info:</span>
-                  <span className="text-base-content">{request.location.additionalInfo}</span>
+                  <span className="text-base-content">{request.locationDto.additionalInfo}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-base-content">Coordinates:</span>
                   <span className="text-base-content">
-                    {request.location.latitude}, {request.location.longitude}
+                    {request.locationDto.latitude}, {request.locationDto.longitude}
                   </span>
                 </div>
               </div>

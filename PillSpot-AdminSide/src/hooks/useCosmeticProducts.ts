@@ -98,6 +98,9 @@ export const useCosmeticProducts = () => {
 
   const deleteProduct = async (id: string) => {
     try {
+      if (!window.confirm('Are you sure you want to delete this product?')) {
+        return;
+      }
       await axiosInstance.delete(`/api/cosmetics/${id}`);
       setProducts(products.filter((p) => p.productId !== id));
       toast.success('Cosmetic deleted successfully!');

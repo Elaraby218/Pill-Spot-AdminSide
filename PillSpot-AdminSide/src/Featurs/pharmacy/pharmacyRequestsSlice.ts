@@ -19,7 +19,7 @@ export const fetchPharmacyRequests = createAsyncThunk(
   'pharmacyRequests/fetchAll',
   async (_, thunkAPI) => {
     try {
-      const response = await axiosInstance.get('/api/pharmacy-requests?PageNumber=1&PageSize=1000');
+      const response = await axiosInstance.get('api/pharmacy-requests?PageNumber=1&PageSize=100');
       return response.data;
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -36,10 +36,10 @@ export const fetchPharmacyRequests = createAsyncThunk(
 
 export const acceptPharmacyRequest = createAsyncThunk(
   'pharmacyRequests/accept',
-  async (id: number, thunkAPI) => {
+  async (requestId: string, thunkAPI) => {
     try {
-      await axiosInstance.put(`/api/pharmacy-requests/${id}/accept`);
-      return id;
+      await axiosInstance.patch(`/api/pharmacy-requests/${requestId}/Approve`);
+      return requestId;
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
@@ -55,10 +55,10 @@ export const acceptPharmacyRequest = createAsyncThunk(
 
 export const rejectPharmacyRequest = createAsyncThunk(
   'pharmacyRequests/reject',
-  async (id: number, thunkAPI) => {
+  async (requestId: string, thunkAPI) => {
     try {
-      await axiosInstance.put(`/api/pharmacy-requests/${id}/reject`);
-      return id;
+      await axiosInstance.patch(`/api/pharmacy-requests/${requestId}/reject`);
+      return requestId;
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401) {
@@ -91,15 +91,15 @@ const pharmacyRequestsSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(acceptPharmacyRequest.fulfilled, (state, action) => {
-        const request = state.requests.find(r => r.id === action.payload);
+        const request = state.requests.find(r => r.requestId === action.payload);
         if (request) {
-          request.status = 'accepted';
+          request.status = 'Accepted';
         }
       })
       .addCase(rejectPharmacyRequest.fulfilled, (state, action) => {
-        const request = state.requests.find(r => r.id === action.payload);
+        const request = state.requests.find(r => r.requestId === action.payload);
         if (request) {
-          request.status = 'rejected';
+          request.status = 'Rejected';
         }
       });
   },

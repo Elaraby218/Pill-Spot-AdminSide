@@ -37,9 +37,25 @@ function AddMedcine() {
     }
   };
 
-  const handleDelete = (id: string) => {
-    // Implement delete functionality if needed
-    console.log('Delete product:', id);
+  const handleDelete = async (id: string) => {
+    // Show confirmation dialog
+    if (!window.confirm('Are you sure you want to delete this product?')) {
+      return;
+    }
+
+    try {
+      // Make API call to delete the product
+      await axiosInstance.delete(`/api/medicines/${id}`);
+      
+      // Show success message
+      toast.success('Product deleted successfully!');
+      
+      // Refresh the products list
+      await fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast.error('Failed to delete product. Please try again.');
+    }
   };
 
   const handleFormSubmit = async (formData: ProductFormData) => {
