@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom'
 import { logout } from '../../../Featurs/AuthLogin/authServices'
 import { resetCurUser } from '../../../Featurs/User/CurUser'
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { MdFeedback } from "react-icons/md";
+import { MdNoteAdd } from "react-icons/md";
+import { MdSell } from "react-icons/md";
+
 
 import { NavLink } from 'react-router-dom';
 import { resetLogin } from '../../../Featurs/AuthLogin/auth';
@@ -51,19 +55,19 @@ const Sider = () => {
         <FaUsersGear className={iconStyle} />
       </NavLink>
 
-      <NavLink to={"feedback"}>
-        <MdSpaceDashboard className={iconStyle} />
+      <NavLink to={"feedback"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Users feedbacks">
+        <MdFeedback className={iconStyle} />
       </NavLink>
-      <NavLink to={"pharmacyies-requests"}>
-        <MdSpaceDashboard className={iconStyle} />
+      <NavLink to={"pharmacyies-requests"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Pharmacy requests">
+        <MdNoteAdd className={iconStyle} />
       </NavLink>
-      <NavLink to={"addproduct"}>
-        <MdSpaceDashboard className={iconStyle} />
+      <NavLink to={"addproduct"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Products Management">
+        <MdSell className={iconStyle} />
       </NavLink>
 
       <div>
         <div className='divider'></div>
-        <NavLink to={"/"} onClick={handleLogout}>
+        <NavLink to={"/"} onClick={handleLogout} className="tooltip hover:tooltip-open tooltip-right" data-tip="Logout">
           <RiLogoutCircleLine className={iconStyle} />
         </NavLink>
       </div>
