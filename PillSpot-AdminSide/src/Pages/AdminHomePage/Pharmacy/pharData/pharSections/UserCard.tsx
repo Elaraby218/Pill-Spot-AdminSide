@@ -23,7 +23,7 @@ const UserCard = ({ employee, onDelete, onEdit }: UserCardProps) => {
         <div className="flex flex-col items-center gap-3 flex-[6] dark:text-gray-600">
           <div className="w-24 h-24 rounded-full overflow-hidden mb-4">
             <img
-              src={base+employee.imageUrl || "https://via.placeholder.com/150"}
+              src={base+employee.profilePictureUrl || "https://via.placeholder.com/150"}
               alt={`${employee.firstName} ${employee.lastName}`}
               className="w-full h-full object-cover"
             />

@@ -39,5 +39,6 @@ export interface Employee {
     phoneNumber: string;
     role: string;
     imageUrl?: string;
+    profilePictureUrl: string 
 }
   
