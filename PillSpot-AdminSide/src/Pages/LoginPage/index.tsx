@@ -16,6 +16,7 @@ import { AppDispatch, RootState } from "../../App/Store";
 import { Login } from "../../Featurs/AuthLogin/auth";
 import { toast } from "sonner";
 import { getUser } from "../../Featurs/User/CurUser";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -30,7 +31,7 @@ const AdminLogin = () => {
   const { t} = useTranslation();
   const [userName,setUserName] = useState<string | null>(null) ;
   const mode = useSelector((state:RootState)=>state.ThemeSlice.theme)
- 
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -38,19 +39,25 @@ const AdminLogin = () => {
   } = useForm<TLoginData>({resolver:zodResolver(loginSchema) , mode:"onBlur"});
   const currLang = useSelector((state:RootState)=>state.langSlice.lang);
   const loginState = useSelector((state:RootState)=>state.authLoginSlice);
+  const curUser = useSelector((state:RootState)=>state.curUserSlice.curUser);
+  const curUserStatus = useSelector((state:RootState)=>state.curUserSlice.status);
 
   useEffect(() => {
-    
-      if (loginState.status === "success") {
-        toast.success("Authenticated");
-        dispatch(getUser(userName as string));
-        
-      } else if (loginState.status === "error") {
-        toast.error("Authentication Failed");
-       
+    if (loginState.status === "success") {
+      toast.success("Authenticated");
+      if (userName) {
+        dispatch(getUser(userName));
       }
-    
-  }, [loginState.status]);
+    } else if (loginState.status === "error") {
+      toast.error("Authentication Failed");
+    }
+  }, [loginState.status, userName]);
+
+  useEffect(() => {
+    if (curUserStatus === "success" && curUser) {
+      navigate("/admin-home/dashboard");
+    }
+  }, [curUserStatus, curUser, navigate]);
 
   const submitForm : SubmitHandler<TLoginData> = (data) => {
     console.log(data) ;

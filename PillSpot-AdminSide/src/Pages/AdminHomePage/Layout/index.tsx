@@ -20,15 +20,17 @@ const HomePageLayout = () => {
     }
   }, [curTheme]);
 
+  console.log(curUser);
+
   // useEffect(() => {
   //   if (!curUser) {
   //     navigate("/", { replace: true });
   //   }
   // }, [curUser, navigate]);
 
-  // if (!curUser) {
-  //   return null;
-  // }
+  if (!curUser) {
+    navigate("/", { replace: true });
+  }
 
   return (
     <>
