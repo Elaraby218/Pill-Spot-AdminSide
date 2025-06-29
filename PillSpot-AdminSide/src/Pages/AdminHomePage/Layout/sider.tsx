@@ -11,7 +11,7 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import { MdFeedback } from "react-icons/md";
 import { MdNoteAdd } from "react-icons/md";
 import { MdSell } from "react-icons/md";
-
+import { MdNotificationAdd } from "react-icons/md";
 
 import { NavLink } from 'react-router-dom';
 import { resetLogin } from '../../../Featurs/AuthLogin/auth';
@@ -42,7 +42,7 @@ const Sider = () => {
   const iconStyle = 'hover:scale-130 duration-200 hover:bg-base-100 w-12 h-12 rounded-full p-2 '
 
   return (
-    <aside className={`hidden sm:flex h-screen w-fit flex-col justify-center items-start gap-20 px-5 rounded-tr-3xl rounded-br-3xl transition-colors duration-300 ${colors} text-4xl`}>
+    <aside className={`hidden sm:flex h-screen w-fit flex-col justify-around items-start px-5 rounded-tr-3xl rounded-br-3xl transition-colors duration-300 ${colors} text-4xl`}>
       <NavLink to={"dashboard"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Dashboard">
         <MdSpaceDashboard className={iconStyle} />
       </NavLink>
@@ -63,6 +63,9 @@ const Sider = () => {
       </NavLink>
       <NavLink to={"addproduct"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Products Management">
         <MdSell className={iconStyle} />
+      </NavLink>
+      <NavLink to={"manage-notification"} className="tooltip hover:tooltip-open tooltip-right" data-tip="Notificaton Management">
+        <MdNotificationAdd className={iconStyle} />
       </NavLink>
 
       <div>

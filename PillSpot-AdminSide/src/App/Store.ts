@@ -11,6 +11,7 @@ import { productReducer } from "../Featurs/product";
 import pharmacyRequestsReducer from "../Featurs/pharmacy/pharmacyRequestsSlice";
 import usersReducer from "../Featurs/User/usersSlice";
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
+import  notificationSlice  from "../Featurs/manageNotification/ManageNotifySlice";
 
 import {
   persistReducer,
@@ -45,6 +46,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   pharmacyRequests: pharmacyRequestsReducer,
   users: usersReducer,
+  notifications : notificationSlice,
 })
 
 export const store = configureStore({

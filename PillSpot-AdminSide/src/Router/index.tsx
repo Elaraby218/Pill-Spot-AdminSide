@@ -17,6 +17,7 @@ import UsersManagementPage from "../Pages/Users Management Page";
 import FeedbackPage from "../Pages/AdminHomePage/FeedBackPage";
 import ComplaintDetailsPage from "../Pages/AdminHomePage/ComplaintDetailsPage/ComplaintDetailsPage";
 import PharmaciesRequests from "../Pages/phamaciesRequests";
+import ManageNotify from "../Pages/notificationManagemnt";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +32,7 @@ const router = createBrowserRouter(
       <Route path="addproduct" index element={<AddProduct/>} />
       <Route path="pharmacyies-requests" index element={<PharmaciesRequests/>} />
       <Route path="users" index element={<UsersManagementPage/>} />
+      <Route path="manage-notification" index element={<ManageNotify/>} />
     </Route>
     
   </Route>

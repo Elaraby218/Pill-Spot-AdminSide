@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { resetLogin } from "../../../Featurs/AuthLogin/auth";
 import { logout } from "../../../Featurs/AuthLogin/authServices";
 import { resetCurUser } from "../../../Featurs/User/CurUser";
+import { MdNotificationAdd } from "react-icons/md";
 
 const cardData = [
   {
@@ -38,16 +39,16 @@ const cardData = [
     to: "/admin-home/addproduct",
   },
   {
+    label: "Manage Notifications",
+    icon: MdNotificationAdd,
+    to: "#",
+    isFake: true,
+  },
+  {
     label: "Logout",
     icon: RiLogoutCircleLine,
     to: "/",
     isLogout: true,
-  },
-  {
-    label: "Coming Soon",
-    icon: MdOutlineQuestionMark,
-    to: "#",
-    isFake: true,
   },
   {
     label: "Placeholder",
@@ -116,7 +117,7 @@ const AdminDashBoard = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center space-y-7 my-[5%] w-full">
+      <div className="flex flex-col items-center justify-center space-y-7 pt-25 w-full">
         <div className="flex flex-row items-center justify-center gap-8 w-full">
           {row1.map((card, i) => (
             <ButtonCard key={card.label} {...card} delay={delaysRow1[i]} onLogout={handleLogout} />

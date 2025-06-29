@@ -26,7 +26,7 @@ export const PharmacyDetailsModal: React.FC<PharmacyDetailsModalProps> = ({
           <div className="flex items-center gap-4">
             <div className="avatar">
               <div className="w-24 h-24 rounded-lg">
-                <img src={request.logoURL} alt={request.name} />
+                <img src={"https://localhost:7298"+request.logoURL} alt={request.name} />
               </div>
             </div>
             <div>
