@@ -10,6 +10,10 @@ import Router from "./Router/index.tsx";
 import "./i18n.ts";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from 'sonner';
+import { startConnection } from "./Featurs/NotificaionHubServices.ts";
+
+
+startConnection();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

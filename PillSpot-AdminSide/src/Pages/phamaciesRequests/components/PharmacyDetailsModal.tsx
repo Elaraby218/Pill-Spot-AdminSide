@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCheck, FaTimes, FaIdCard, FaMapMarkerAlt, FaClock, FaDownload } from 'react-icons/fa';
+import { FaCheck, FaTimes, FaIdCard, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
 import { PharmacyRequest } from '../types';
 
 interface PharmacyDetailsModalProps {
