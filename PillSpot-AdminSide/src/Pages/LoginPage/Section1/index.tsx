@@ -19,12 +19,14 @@ const Section1 = () => {
     if (typedInstance.current) {
       typedInstance.current.destroy();
     }
+    // Get the translated strings at the time of effect
+    const strings = [
+      "PillSpot",
+      t("pSpot2"),
+      t("pSpot3"),
+    ];
     typedInstance.current = new Typed(el.current, {
-      strings: [
-        "PillSpot",
-        t("pSpot2"),
-        t("pSpot3"),
-      ],
+      strings,
       typeSpeed: 50,
       loop: true,
     });
@@ -33,7 +35,7 @@ const Section1 = () => {
         typedInstance.current.destroy();
       }
     };
-  }, [i18n.language]); 
+  }, [i18n.language, t]); 
 
   return (
     <div
