@@ -143,7 +143,7 @@ const EditProductModal = ({ product, isOpen, onClose, onSave, refreshProducts }:
             setValue('sideEffects', product.sideEffects || '');
             setValue('usageInstructions', product.usageInstructions);
             setValue('requiresPrescription', product.isPrescriptionRequired);
-            setPreview(product.imageURL ? `https://localhost:7298${product.imageURL}` : null);
+            setPreview(product.imageURL ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}` : null);
             setSearchTerm(product.subCategoryDto.categoryDto.name);
             setSubCategorySearchTerm(product.subCategoryDto.name);
             setSelectedCategoryId(product.subCategoryDto.categoryDto.categoryId);

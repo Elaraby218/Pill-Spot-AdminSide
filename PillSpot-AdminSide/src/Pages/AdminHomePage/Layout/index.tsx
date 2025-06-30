@@ -22,7 +22,7 @@ const HomePageLayout = () => {
     }
   }, [curTheme]);
 
-  console.log(curUser);
+  //console.log(curUser);
 
   // useEffect(() => {
   //   if (!curUser) {

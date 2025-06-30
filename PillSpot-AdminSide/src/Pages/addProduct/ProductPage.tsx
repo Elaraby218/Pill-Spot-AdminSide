@@ -11,7 +11,7 @@ function AddMedcine() {
   const [error, setError] = useState<string | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  console.log(editingProduct);
+  //console.log(editingProduct);
 
   const fetchProducts = async () => {
     try {

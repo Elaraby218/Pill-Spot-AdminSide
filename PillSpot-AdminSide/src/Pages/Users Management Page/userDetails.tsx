@@ -18,12 +18,12 @@ interface UserDetailsProps {
   onUserDeleted: () => void;
 }
 
-const API_BASE = 'https://localhost:7298';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) => {
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState(''); // role not in API response, keep for future
+ // const [role, setRole] = useState(''); // role not in API response, keep for future
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');

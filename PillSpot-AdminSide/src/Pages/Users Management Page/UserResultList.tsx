@@ -35,7 +35,7 @@ const UserResultList: React.FC<UserResultListProps> = ({ results, loading, error
     >
       <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-500 to-yellow-400 flex items-center justify-center text-2xl font-bold text-white overflow-hidden">
         {user.profilePictureUrl ? (
-          <img src={"https://localhost:7298/"+user.profilePictureUrl} alt={user.userName} className="w-full h-full rounded-full object-cover" />
+          <img src={import.meta.env.VITE_API_BASE_URL+user.profilePictureUrl} alt={user.userName} className="w-full h-full rounded-full object-cover" />
         ) : (
           user.userName[0].toUpperCase()
         )}

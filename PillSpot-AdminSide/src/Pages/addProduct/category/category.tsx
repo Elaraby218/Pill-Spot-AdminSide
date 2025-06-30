@@ -18,25 +18,26 @@ const Category: React.FC<CategoryProps> = ({ selectedCategory, onSelectCategory 
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('Fetching categories...');
+  //  console.log('Fetching categories...');
     dispatch(getAllCategories())
       .unwrap()
       .then((data) => {
         console.log('Categories fetched:', data);
       })
       .catch((error) => {
-        console.error('Error fetching categories:', error);
+   //     console.error('Error fetching categories:', error);
+          toast.error('Error fetching categories:', error)
       });
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('Categories in state:', categories);
+  //  console.log('Categories in state:', categories);
     if (!categories) return;
     
     const filtered = categories.filter(category =>
       category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    console.log('Filtered categories:', filtered);
+    //console.log('Filtered categories:', filtered);
     setFilteredCategories(filtered);
   }, [searchTerm, categories]);
 
@@ -54,7 +55,7 @@ const Category: React.FC<CategoryProps> = ({ selectedCategory, onSelectCategory 
       dispatch(getAllCategories());
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to add category';
-      console.error('Error adding category:', error);
+     // console.error('Error adding category:', error);
       toast.error(errorMessage);
     }
   };

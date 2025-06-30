@@ -37,7 +37,7 @@ const UserDetailsPanel: React.FC<UserDetailsPanelProps> = ({ user, onUserUpdated
   const updateStatus = useSelector((state: RootState) => state.users.updateStatus);
   const updateError = useSelector((state: RootState) => state.users.updateError);
   const [lockout, setLockout] = useState(false);
-  const API_BASE = 'https://localhost:7298';
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   const { register, handleSubmit, reset } = useForm<UserFormValues>({
     defaultValues: {

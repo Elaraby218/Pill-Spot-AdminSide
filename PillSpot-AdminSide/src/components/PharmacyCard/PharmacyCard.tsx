@@ -23,7 +23,7 @@ const PharmacyCard = ({ pharmacy, onSelect, isSelected }: PharmacyCardProps) => 
     }
   }, [theme]);
 
-  const base = "https://localhost:7298/";
+  const base = import.meta.env.VITE_API_BASE_URL;
 
   return (
     <div

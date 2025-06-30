@@ -60,7 +60,7 @@ const AdminLogin = () => {
   }, [curUserStatus, curUser, navigate]);
 
   const submitForm : SubmitHandler<TLoginData> = (data) => {
-    console.log(data) ;
+    //console.log(data) ;
     setUserName(data.userName);
     dispatch(Login(data));
     

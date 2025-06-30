@@ -65,7 +65,7 @@ const PharInfo = ({ pharmacy, onPharmacyUpdate }: PharInfoProps) => {
         daysOpen: pharmacy.daysOpen,
       });
       setSelectedDays(pharmacy.daysOpen ? pharmacy.daysOpen.split(", ") : []);
-      setPreviewUrl(pharmacy.logoURL ? `https://localhost:7298/${pharmacy.logoURL}` : "/6567dfgh.png");
+      setPreviewUrl(pharmacy.logoURL ? `${import.meta.env.VITE_API_BASE_URL}${pharmacy.logoURL}` : "/6567dfgh.png");
     }
   }, [pharmacy, reset]);
 
@@ -89,7 +89,7 @@ const PharInfo = ({ pharmacy, onPharmacyUpdate }: PharInfoProps) => {
 
   const handleRemoveImage = () => {
     setSelectedFile(null);
-    setPreviewUrl(pharmacy?.logoURL ? `https://localhost:7298/${pharmacy.logoURL}` : "/6567dfgh.png");
+    setPreviewUrl(pharmacy?.logoURL ? `${import.meta.env.VITE_API_BASE_URL}${pharmacy.logoURL}` : "/6567dfgh.png");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }

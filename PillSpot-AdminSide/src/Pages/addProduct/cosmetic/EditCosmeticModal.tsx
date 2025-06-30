@@ -128,7 +128,7 @@ const EditCosmeticModal = ({ product, isOpen, onClose, onSave, refreshCosmetics 
         setValue('usageInstructions', product.usageInstructions);
         
         // Set image preview using imageURL
-        setPreview(product.imageURL ? `https://localhost:7298${product.imageURL}` : null);
+        setPreview(product.imageURL ? `${import.meta.env.VITE_API_BASE_URL}${product.imageURL}` : null);
         
         // Set category and subcategory from the product's subCategoryDto structure
         if (product.subCategoryDto) {

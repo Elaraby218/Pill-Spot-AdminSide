@@ -43,7 +43,7 @@ const CosmeticCard = ({ product, onDelete, refreshCosmetics }: CosmeticCardProps
           <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 shadow-md">
             {product.imageURL ? (
               <img
-                src={`https://localhost:7298${product.imageURL}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}${product.imageURL}`}
                 alt={product.name}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
               />

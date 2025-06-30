@@ -22,6 +22,9 @@ export interface IloginData {
 const apiUrl = import.meta.env.VITE_LOGIN_URL;
 const logoutUrl = import.meta.env.VITE_LOGOUT_URL;
 
+console.log(apiUrl)
+console.log(logoutUrl)
+
 export const login = async (userData: IloginData) => {
     const response = await axiosInstance.post(apiUrl, userData );
     if (response.data) return userData.userName;

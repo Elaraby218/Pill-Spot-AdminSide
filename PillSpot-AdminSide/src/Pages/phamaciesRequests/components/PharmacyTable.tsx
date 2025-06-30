@@ -36,7 +36,7 @@ export const PharmacyTable: React.FC<PharmacyTableProps> = ({
                 <div className="flex items-center space-x-3">
                   <div className="avatar">
                     <div className="mask mask-squircle w-12 h-12">
-                      <img src={"https://localhost:7298" + request.logoURL} alt={request.name} />
+                      <img src={import.meta.env.VITE_API_BASE_URL + request.logoURL} alt={request.name} />
                     </div>
                   </div>
                   <div>
