@@ -30,11 +30,10 @@ const CosmeticForm = ({ onSubmit, isLoading }: CosmeticFormProps) => {
     register, 
     handleSubmit, 
     reset,
-    watch,
     formState: { errors } 
   } = useForm<CosmeticProductFormData>();
 
-  const selectedCategoryId = watch('subCategoryId'); // This will be used to get subcategories
+ // const selectedCategoryId = watch('subCategoryId'); // This will be used to get subcategories
 
   useEffect(() => {
     const fetchCategories = async () => {

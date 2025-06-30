@@ -25,8 +25,8 @@ const UsersManagementPage = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [userName, setUserName] = useState('');
   const results = useSelector((state: RootState) => state.users.users);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading] = useState(false);
+  const [error] = useState('');
 
   const dipatch = useDispatch<AppDispatch>();
 

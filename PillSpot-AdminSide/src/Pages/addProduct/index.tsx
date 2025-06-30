@@ -18,7 +18,10 @@ const AddProduct = () => {
   const pages = [
     <div className="flex w-full gap-5">
       <Category onSelectCategory={setSelectedCategory} selectedCategory={selectedCategory} />
-      <SubCategoy selectedCategory={selectedCategory} />
+      <SubCategoy
+        selectedCategory={selectedCategory}
+        onSelectSubCategory={() => {}}
+      />
     </div>,
     <AddMedcine/>,
     <CosmeticPage/>

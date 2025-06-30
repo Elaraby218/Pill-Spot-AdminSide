@@ -18,7 +18,7 @@ interface UserDetailsProps {
   onUserDeleted: () => void;
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+//const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 const UserDetails = ({ user, onUserUpdated, onUserDeleted }: UserDetailsProps) => {
   const [email, setEmail] = useState(user.email);

@@ -10,7 +10,7 @@ interface CosmeticListProps {
   refreshCosmetics: () => void;
 }
 
-const CosmeticList = ({ products, onDelete, onEdit, refreshCosmetics }: CosmeticListProps) => {
+const CosmeticList = ({ products, onDelete, refreshCosmetics }: CosmeticListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredProducts = useMemo(() => {

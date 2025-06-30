@@ -17,7 +17,7 @@ export const StatsHeader: React.FC<StatsHeaderProps> = ({ requests }) => {
         <div className="stat">
           <div className="stat-title text-base-content">Pending</div>
           <div className="stat-value text-warning">
-            {requests.filter(r => r.status === 'pending').length}
+            {requests.filter(r => r.status === 'Pending').length}
           </div>
         </div>
       </div>

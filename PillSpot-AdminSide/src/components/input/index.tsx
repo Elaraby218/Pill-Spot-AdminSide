@@ -26,7 +26,7 @@ const TextInput: React.FC<IProps> = ({
   const errorMessage = errors?.[name]?.message as string;
   const [showPass, setShowPass] = useState(false);
   const [Ttype, setTtype] = useState(type);
-  function handleShowPass(e) {
+  function handleShowPass(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setShowPass(!showPass);
     if (Ttype === "password") setTtype("text");
