@@ -51,7 +51,7 @@ export const editPharmacy = createAsyncThunk(
         }
       );
 
-      // After successful update, refresh the pharmacies list
+
       await thunkAPI.dispatch(getAllPharmacies());
 
       return response.data;

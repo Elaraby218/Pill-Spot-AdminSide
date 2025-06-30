@@ -12,6 +12,7 @@ import pharmacyRequestsReducer from "../Featurs/pharmacy/pharmacyRequestsSlice";
 import usersReducer from "../Featurs/User/usersSlice";
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import notificationSlice from "../Featurs/Notification/notificationSlice";
+import manageNotificationReducer from "../Featurs/manageNotification/ManageNotifySlice";
 
 import {
   persistReducer,
@@ -47,6 +48,7 @@ const rootReducer = combineReducers({
   pharmacyRequests: pharmacyRequestsReducer,
   users: usersReducer,
   notifications: notificationSlice,
+  manageNotification: manageNotificationReducer,
 })
 
 export const store = configureStore({

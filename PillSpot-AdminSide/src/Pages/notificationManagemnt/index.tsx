@@ -36,7 +36,7 @@ const ManageNotify = () => {
     error,
     sendStatus,
     sendError
-  } = useSelector((state: RootState) => state.notifications);
+  } = useSelector((state: RootState) => state.manageNotification);
 
   // Compute counts
   const unreadCount = Array.isArray(unreadNotifications) ? unreadNotifications.length : 0;

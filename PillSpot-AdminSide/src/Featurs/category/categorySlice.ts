@@ -105,45 +105,45 @@ const categorySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Get All Categories
+   
       .addCase(getAllCategories.pending, (state) => {
-        console.log('getAllCategories pending');
+        // console.log('getAllCategories pending');
         state.status = "loading";
       })
       .addCase(getAllCategories.fulfilled, (state, action) => {
-        console.log('getAllCategories fulfilled:', action.payload);
+        // console.log('getAllCategories fulfilled:', action.payload);
         state.status = "success";
         state.categories = action.payload;
         state.message = "";
       })
       .addCase(getAllCategories.rejected, (state, action) => {
-        console.log('getAllCategories rejected:', action.payload);
+        // console.log('getAllCategories rejected:', action.payload);
         state.status = "error";
         state.message = action.payload as string;
       })
-      // Add Category
+   
       .addCase(addCategory.pending, (state) => {
-        console.log('addCategory pending');
+        // console.log('addCategory pending');
         state.status = "loading";
       })
       .addCase(addCategory.fulfilled, (state, action) => {
-        console.log('addCategory fulfilled:', action.payload);
+        // console.log('addCategory fulfilled:', action.payload);
         state.status = "success";
         state.categories.push(action.payload);
         state.message = "";
       })
       .addCase(addCategory.rejected, (state, action) => {
-        console.log('addCategory rejected:', action.payload);
+        // console.log('addCategory rejected:', action.payload);
         state.status = "error";
         state.message = action.payload as string;
       })
       // Delete Category
       .addCase(deleteCategory.pending, (state) => {
-        console.log('deleteCategory pending');
+        // console.log('deleteCategory pending');
         state.status = "loading";
       })
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        console.log('deleteCategory fulfilled:', action.payload);
+        // console.log('deleteCategory fulfilled:', action.payload);
         state.status = "success";
         state.categories = state.categories.filter(cat => cat.categoryId !== action.payload);
         // Clear selected category if it was deleted
@@ -153,7 +153,7 @@ const categorySlice = createSlice({
         state.message = "";
       })
       .addCase(deleteCategory.rejected, (state, action) => {
-        console.log('deleteCategory rejected:', action.payload);
+        // console.log('deleteCategory rejected:', action.payload);
         state.status = "error";
         state.message = action.payload as string;
       });

@@ -50,7 +50,7 @@ export const addProduct = createAsyncThunk(
     try {
       const formData = new FormData();
       
-      // Append all text fields
+
       formData.append('name', productData.name);
       formData.append('category', productData.category);
       formData.append('subCategoryId', productData.subCategory);
@@ -62,7 +62,7 @@ export const addProduct = createAsyncThunk(
       formData.append('usageInstructions', productData.usageInstructions);
       formData.append('isPrescriptionRequired', String(productData.requiresPrescription));
       
-      // Append image if it exists
+
       if (productData.image && productData.image[0]) {
         formData.append('image', productData.image[0]);
       }
