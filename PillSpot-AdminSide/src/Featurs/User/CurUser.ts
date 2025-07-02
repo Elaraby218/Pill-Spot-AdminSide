@@ -19,6 +19,8 @@ interface IInitialState {
   Message: string;
 }
 
+// hello
+
 const initialState: IInitialState = {
   curUser: null,
   status: "idle",
