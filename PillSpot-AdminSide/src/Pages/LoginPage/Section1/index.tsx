@@ -15,6 +15,7 @@ const Section1 = () => {
   const typedInstance = useRef<Typed | null>(null);
   const { t, i18n } = useTranslation();
 
+  // hello from pill spot admin side 
   useEffect(() => {
     if (typedInstance.current) {
       typedInstance.current.destroy();
