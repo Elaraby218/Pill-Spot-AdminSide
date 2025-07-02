@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import axiosInstance from "../../axiosInstance";
 
 interface IcurUser {
   firstName: string;
@@ -24,13 +25,14 @@ const initialState: IInitialState = {
   Message: "",
 };
 
-const url = import.meta.env.VITE_GETUSER_URL;
+const url = 'api/users/';
+console.log("rulllllllllllllllll" , url)
 
 export const getUser = createAsyncThunk(
   "/getUser",
   async (userName: string, thunkAPI) => {
     try {
-      const response = await axios.get(`${url}${userName}`, {
+      const response = await axiosInstance.get(`${url}${userName}`, {
         withCredentials: true,
       });
       return response.data;

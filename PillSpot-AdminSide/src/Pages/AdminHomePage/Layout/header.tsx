@@ -19,6 +19,8 @@ const Header = () => {
     setIsNotificationDrawerOpen(false);
   };
 
+  console.log(curUser) ;
+
   return (
     <>
       <header className="flex justify-around items-center py-2 w-full">
