@@ -19,7 +19,7 @@ interface IInitialState {
   Message: string;
 }
 
-// hello
+// hello last stable version
 
 const initialState: IInitialState = {
   curUser: null,
